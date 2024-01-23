@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import { ILoginData } from "../../utils/types/interface";
@@ -10,6 +10,11 @@ export default function LogIn() {
     email: "",
     password: ""
   });
+
+  useEffect(() => {
+    console.log(loginData);
+    
+  }, [loginData])
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -79,9 +84,12 @@ export default function LogIn() {
 
           <div>
             <button
-              type="submit"
+              // type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={() => post('https://jsonplaceholder.typicode.com/posts', loginData)}
+              onClick={(e) => {
+                e.preventDefault();
+                post('https://jsonplaceholder.typicode.com/posts', loginData)
+              }}
             >
               Login
             </button>

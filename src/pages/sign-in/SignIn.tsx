@@ -13,6 +13,11 @@ export default function SignIn() {
     password: "",
   });
 
+  useEffect(() => {
+    console.log(signInData);
+    
+  }, [signInData])
+
   return (
     <div className="w-full h-full flex justify-center items-canter">
       <div className="flex min-w-full min-h-full flex-col justify-center px-6 py-6 lg:px-8">
@@ -116,7 +121,10 @@ export default function SignIn() {
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md mt-6 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={() => post('https://jsonplaceholder.typicode.com/posts', signInData)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  post('https://jsonplaceholder.typicode.com/posts', signInData)
+                }}
               >
                 Create account
               </button>

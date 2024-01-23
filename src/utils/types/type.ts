@@ -1,3 +1,3 @@
-import { ILoginData, ISigninData } from "./interface"
+import { ILoginData, ISigninData, IForgetPassword } from "./interface"
 
-export type userData = ILoginData | ISigninData;
+export type userData = ILoginData | ISigninData | IForgetPassword;

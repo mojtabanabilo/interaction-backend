@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 // pages
-const SignIn : any = lazy(() => import('./pages/sign-in/SignIn'));
+const SignIn : any = lazy(() => import('./pages/sign-up/SignUp'));
 const LogIn : any = lazy(() => import('./pages/log-in/LogIn'));
 const ForgetPassword : any = lazy(() => import('./pages/forget-password/ForgetPassword'));
 const NotFound : any = lazy(() => import('./pages/not-found/NotFound'));

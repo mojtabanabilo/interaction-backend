@@ -3,7 +3,7 @@ export interface ILoginData {
     password: string
 }
 
-export interface ISigninData {
+export interface ISignupData {
     firstName: string
     lastName: string
     email: string

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
-import { ISigninData } from "../../utils/types/interface";
+import { ISignupData } from "../../utils/types/interface";
 import { post } from "../../utils/fetch API/fetch";
 
-export default function SignIn() {
+export default function SignUp() {
   // states
-  const [signInData, setSignInData] = useState<ISigninData>({
+  const [signUpData, setSignUpData] = useState<ISignupData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -14,9 +14,9 @@ export default function SignIn() {
   });
 
   useEffect(() => {
-    console.log(signInData);
+    console.log(signUpData);
     
-  }, [signInData])
+  }, [signUpData])
 
   return (
     <div className="w-full h-full flex justify-center items-canter">
@@ -47,8 +47,8 @@ export default function SignIn() {
                   type="text"
                   required
                   className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignInData({...signInData, [e.target.name] : e.target.value})}
-                  value={signInData.firstName}
+                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
+                  value={signUpData.firstName}
                 />
               </div>
             </div>
@@ -67,8 +67,8 @@ export default function SignIn() {
                   type="text"
                   required
                   className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignInData({...signInData, [e.target.name] : e.target.value})}
-                  value={signInData.lastName}
+                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
+                  value={signUpData.lastName}
                 />
               </div>
             </div>
@@ -88,8 +88,8 @@ export default function SignIn() {
                   autoComplete="email"
                   required
                   className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignInData({...signInData, [e.target.name] : e.target.value})}
-                  value={signInData.email}
+                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
+                  value={signUpData.email}
                 />
               </div>
             </div>
@@ -111,8 +111,8 @@ export default function SignIn() {
                   autoComplete="current-password"
                   required
                   className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignInData({...signInData, [e.target.name] : e.target.value})}
-                  value={signInData.password}
+                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
+                  value={signUpData.password}
                 />
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function SignIn() {
                 className="flex w-full justify-center rounded-md mt-6 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={(e) => {
                   e.preventDefault();
-                  post('https://jsonplaceholder.typicode.com/posts', signInData)
+                  post('http://localhost:4000/auth/register', signUpData)
                 }}
               >
                 Create account

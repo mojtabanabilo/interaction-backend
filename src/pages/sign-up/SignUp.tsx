@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
-import { ISignupData } from "../../utils/types/interface";
+import {
+  ISignupData,
+  ISignupErrorValidation,
+  ISignupTouch,
+} from "../../utils/types/interface";
+import { signUpValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 
 export default function SignUp() {
@@ -12,11 +17,18 @@ export default function SignUp() {
     email: "",
     password: "",
   });
+  const [signUpError, setSignUpError] = useState<ISignupErrorValidation>({});
+  const [touch, setTouch] = useState<ISignupTouch>({
+    firstNameTouch: false,
+    lastNameTouch: false,
+    emailTouch: false,
+    passwordTouch: false,
+  });
 
+  // lifecycle
   useEffect(() => {
-    console.log(signUpData);
-    
-  }, [signUpData])
+    setSignUpError(signUpValidation(signUpData));
+  }, [signUpData]);
 
   return (
     <div className="w-full h-full flex justify-center items-canter">
@@ -31,90 +43,104 @@ export default function SignUp() {
             Create new Account
           </h2>
         </div>
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-2" action="#" method="POST">
-            <div>
-              <label
-                htmlFor="firstname"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Firstname
-              </label>
-              <div className="mt-2">
-                <input
-                  id="firstname"
-                  name="firstName"
-                  type="text"
-                  required
-                  className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
-                  value={signUpData.firstName}
-                />
-              </div>
+            <div className="mt-2">
+              <input
+                id="firstname"
+                name="firstName"
+                type="text"
+                required
+                placeholder="first name"
+                className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={(e) =>
+                  setSignUpData({
+                    ...signUpData,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+                value={signUpData.firstName}
+                onFocus={() => setTouch({ ...touch, firstNameTouch: true })}
+              />
+              {touch.firstNameTouch && (
+                <span className="text-sm bg-red-200 text-red-800">
+                  {signUpError.firstNameError}
+                </span>
+              )}
             </div>
 
-            <div>
-              <label
-                htmlFor="lastname"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Lastname
-              </label>
-              <div className="mt-2">
-                <input
-                  id="lastname"
-                  name="lastName"
-                  type="text"
-                  required
-                  className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
-                  value={signUpData.lastName}
-                />
-              </div>
+            <div className="mt-2">
+              <input
+                id="lastname"
+                name="lastName"
+                type="text"
+                required
+                placeholder="last name"
+                className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={(e) =>
+                  setSignUpData({
+                    ...signUpData,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+                value={signUpData.lastName}
+                onFocus={() => setTouch({ ...touch, lastNameTouch: true })}
+              />
+              {touch.lastNameTouch && (
+                <span className="text-sm bg-red-200 text-red-800">
+                  {signUpError.lastNameError}
+                </span>
+              )}
             </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
-                  value={signUpData.email}
-                />
-              </div>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                placeholder="email"
+                className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={(e) =>
+                  setSignUpData({
+                    ...signUpData,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+                value={signUpData.email}
+                onFocus={() => setTouch({ ...touch, emailTouch: true })}
+              />
+              {touch.emailTouch && (
+                <span className="text-sm bg-red-200 text-red-800">
+                  {signUpError.emailError}
+                </span>
+              )}
             </div>
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
-                >
-                  Password
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  onChange={(e) => setSignUpData({...signUpData, [e.target.name] : e.target.value})}
-                  value={signUpData.password}
-                />
-              </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                placeholder="password"
+                className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={(e) =>
+                  setSignUpData({
+                    ...signUpData,
+                    [e.target.name]: e.target.value,
+                  })
+                }
+                value={signUpData.password}
+                onFocus={() => setTouch({ ...touch, passwordTouch: true })}
+              />
+              {touch.passwordTouch && (
+                <span className="text-sm bg-red-200 text-red-800">
+                  {signUpError.passwordError}
+                </span>
+              )}
             </div>
 
             <div>
@@ -122,8 +148,13 @@ export default function SignUp() {
                 type="submit"
                 className="flex w-full justify-center rounded-md mt-6 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={(e) => {
-                  e.preventDefault();
-                  post('http://localhost:4000/auth/register', signUpData)
+                  if (Object.keys(signUpError).length === 0) {
+                    e.preventDefault();
+                    post(
+                      "https://jsonplaceholder.typicode.com/posts",
+                      signUpData
+                    );
+                  }
                 }}
               >
                 Create account

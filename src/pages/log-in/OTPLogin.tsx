@@ -1,31 +1,30 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
-import {
-  ILoginData,
-  ILoginTouch,
-  ILoginErrorValidation,
-} from "../../utils/types/interface";
-import { logInValidation } from "../../utils/functions/functions";
+import { otpLoginValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 
-export default function LogIn() {
+export default function OTPLogin() {
+  //navigator
+  const navigate = useNavigate();
+
   //states
-  const [loginData, setLoginData] = useState<ILoginData>({
+  const [loginData, setLoginData] = useState<{ email: string }>({
     email: "",
-    password: "",
   });
-  const [loginErr, setLoginErr] = useState<ILoginErrorValidation>({});
-  const [touch, setTouch] = useState<ILoginTouch>({
-    emailTouch: false,
-    passwordTouch: false,
-  });
+  const [loginErr, setLoginErr] = useState<{ emailError?: string }>({});
+  const [touch, setTouch] = useState<boolean>(false);
+  const [statusCode, setStatusCode] = useState<number>(0);
 
   // lifecycle
   useEffect(() => {
-    setLoginErr(logInValidation(loginData));
+    setLoginErr(otpLoginValidation(loginData));
     console.log(loginErr);
-  }, [loginData]);
+    
+    if (statusCode === 201) {
+      navigate("/user-code", { replace: true });
+    }
+  }, [loginData, statusCode, navigate]);
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -36,7 +35,7 @@ export default function LogIn() {
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Log In to your account
+          One Time Password
         </h2>
       </div>
       <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -57,36 +56,11 @@ export default function LogIn() {
                 })
               }
               value={loginData.email}
-              onFocus={() => setTouch({ ...touch, emailTouch: true })}
+              onFocus={() => setTouch(true)}
             />
-            {touch.emailTouch && (
+            {touch === true && (
               <span className="text-sm bg-red-200 text-red-800">
                 {loginErr.emailError}
-              </span>
-            )}
-          </div>
-
-          <div className="mt-2">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-              placeholder="password"
-              className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={(e) =>
-                setLoginData({
-                  ...loginData,
-                  [e.target.name]: e.target.value,
-                })
-              }
-              value={loginData.password}
-              onFocus={() => setTouch({ ...touch, passwordTouch: true })}
-            />
-            {touch.passwordTouch && (
-              <span className="text-sm bg-red-200 text-red-800">
-                {loginErr.passwordError}
               </span>
             )}
           </div>
@@ -96,29 +70,22 @@ export default function LogIn() {
               // type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={(e) => {
-                if(Object.keys(loginErr).length === 0) {
-                  e.preventDefault();
+                e.preventDefault();
+                if (Object.keys(loginErr).length === 0) {
                   post(
                     "https://jsonplaceholder.typicode.com/posts",
-                    loginData
+                    loginData,
+                    undefined,
+                    setStatusCode
                   );
                 }
               }}
             >
-              Login
+              Send Code
             </button>
           </div>
         </form>
         <p className="mt-10 text-center text-sm text-gray-500">
-          I don't remember the password.{" "}
-          <Link
-            to={"/otp-login"}
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-          >
-            OTP Login !
-          </Link>
-        </p>
-        <p className="mt-2 text-center text-sm text-gray-500">
           i want a new account.{" "}
           <Link
             to={"/sign-in"}

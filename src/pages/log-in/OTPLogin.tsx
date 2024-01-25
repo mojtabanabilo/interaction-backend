@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import { otpLoginValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function OTPLogin() {
   //navigator
@@ -25,6 +27,9 @@ export default function OTPLogin() {
       navigate("/user-code", { replace: true });
     }
   }, [loginData, statusCode, navigate]);
+
+  // toastify
+  const notify = () => toast.error("Invalid Data !");
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -78,6 +83,8 @@ export default function OTPLogin() {
                     undefined,
                     setStatusCode
                   );
+                } else {
+                  notify();
                 }
               }}
             >
@@ -95,6 +102,18 @@ export default function OTPLogin() {
           </Link>
         </p>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

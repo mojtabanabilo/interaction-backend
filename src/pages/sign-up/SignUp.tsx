@@ -8,6 +8,8 @@ import {
 } from "../../utils/types/interface";
 import { signUpValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignUp() {
   // states
@@ -29,6 +31,9 @@ export default function SignUp() {
   useEffect(() => {
     setSignUpError(signUpValidation(signUpData));
   }, [signUpData]);
+
+  // toastify
+  const notify = () => toast.error("Invalid Data !");
 
   return (
     <div className="w-full h-full flex justify-center items-canter">
@@ -148,12 +153,14 @@ export default function SignUp() {
                 type="submit"
                 className="flex w-full justify-center rounded-md mt-6 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 onClick={(e) => {
+                  e.preventDefault();
                   if (Object.keys(signUpError).length === 0) {
-                    e.preventDefault();
                     post(
                       "https://jsonplaceholder.typicode.com/posts",
                       signUpData
                     );
+                  } else {
+                    notify();
                   }
                 }}
               >
@@ -172,6 +179,18 @@ export default function SignUp() {
           </p>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }

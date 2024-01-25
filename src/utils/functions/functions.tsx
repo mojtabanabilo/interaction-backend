@@ -93,10 +93,13 @@ export const otpLoginValidation: Function = (data: {
 export const userCodeValidation: Function = (data: {
   code: string;
 }): { codeError: string } => {
+  const codeRegex = /^\d+$/;
   const objError: any = {};
 
-  if (!data.code?.trim()) {
-    objError.codeError = "Email is Empty !";
+  if (!data.code) {
+    objError.codeError = "Code is Empty !";
+  } else if(!codeRegex.test(data.code)) {
+    objError.codeError = "Please type Number !";
   } else {
     delete objError.codeError;
   }

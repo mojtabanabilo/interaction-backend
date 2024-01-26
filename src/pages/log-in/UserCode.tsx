@@ -17,7 +17,6 @@ export default function UserCode() {
   // lifecycle
   useEffect(() => {
     setUserCodeErr(userCodeValidation(userCode));
-    console.log(userCodeErr);
   }, [userCode]);
 
   // toastify

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
+import spinner from "../../assets/Rolling-1.1s-244px.gif";
 import {
   ISignupData,
   ISignupErrorValidation,
@@ -26,11 +27,19 @@ export default function SignUp() {
     emailTouch: false,
     passwordTouch: false,
   });
+  const [statusCode, setStatusCode] = useState<number | null>(null);
 
   // lifecycle
   useEffect(() => {
     setSignUpError(signUpValidation(signUpData));
+    console.log(statusCode);
   }, [signUpData]);
+  useEffect(() => {
+    if(statusCode === 201) navigate('/log-in', { replace: true })
+  }, [statusCode])
+
+  // navigator
+  const navigate = useNavigate();
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -157,7 +166,9 @@ export default function SignUp() {
                   if (Object.keys(signUpError).length === 0) {
                     post(
                       "https://jsonplaceholder.typicode.com/posts",
-                      signUpData
+                      signUpData,
+                      undefined,
+                      setStatusCode
                     );
                   } else {
                     notify();

@@ -21,7 +21,6 @@ export default function OTPLogin() {
   // lifecycle
   useEffect(() => {
     setLoginErr(otpLoginValidation(loginData));
-    console.log(loginErr);
     
     if (statusCode === 201) {
       navigate("/user-code", { replace: true });

@@ -10,8 +10,14 @@ import { logInValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from 'universal-cookie';
+
+
 
 export default function LogIn() {
+  // cookie
+  const cookies = new Cookies();
+
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
     email: "",
@@ -22,12 +28,16 @@ export default function LogIn() {
     emailTouch: false,
     passwordTouch: false,
   });
+  const [statusCode, setStatusCode] = useState<number | null>(null);
+
 
   // lifecycle
   useEffect(() => {
     setLoginErr(logInValidation(loginData));
-    console.log(loginErr);
   }, [loginData]);
+  useEffect(() => {
+    if (statusCode === 201) cookies.set('access-token', 'Pacman', {expires: new Date(Date.now() + 259200000)});
+  }, [statusCode])
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -105,7 +115,9 @@ export default function LogIn() {
                 if(Object.keys(loginErr).length === 0) {
                   post(
                     "https://jsonplaceholder.typicode.com/posts",
-                    loginData
+                    loginData,
+                    undefined,
+                    setStatusCode
                   );
                 } else {
                   notify();

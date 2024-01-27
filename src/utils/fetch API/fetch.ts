@@ -1,13 +1,19 @@
 import axios from "axios";
 import { userData } from "../types/type";
 
-export const post = (url: string, data: userData, setStateErr?: Function, statusCode?: Function) => {
-    axios.post(url, data)
-    .then(res => {
-        statusCode && statusCode(res.status)
-        console.log(res);
+export const post = (
+  url: string,
+  data: userData,
+  setError?: Function,
+  setData?: Function
+) => {
+  axios
+    .post(url, data)
+    .then((res) => {
+      setData && setData(res);
+      console.log(res);
     })
-    .catch(er => {
-        setStateErr && setStateErr(er)
-    })
-}
+    .catch((er) => {
+      setError && setError(er);
+    });
+};

@@ -1,23 +1,34 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import { userCodeValidation } from "../../utils/functions/functions";
+import { IUserCodeFetchData } from "../../utils/types/interface";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function UserCode() {
+  // params
+  const { email } = useParams();  
+
   //states
-  const [userCode, setUserCode] = useState<{ code: string }>({
+  const [userCode, setUserCode] = useState<IUserCodeFetchData>({
     code: "",
+    email: ""
   });
   const [userCodeErr, setUserCodeErr] = useState<{ codeError?: string }>({});
   const [touch, setTouch] = useState<boolean>(false);
 
   // lifecycle
   useEffect(() => {
-    setUserCodeErr(userCodeValidation(userCode));
+    console.log(userCode);
   }, [userCode]);
+  useEffect(() => {
+    setUserCodeErr(userCodeValidation(userCode));
+  }, [userCode.code]);
+  useEffect(() => {
+    setUserCode({...userCode, email: email})
+  }, [email])
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -44,7 +55,7 @@ export default function UserCode() {
               required
               placeholder="code (OTP)"
               className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={(e) => setUserCode({ code: e.target.value })}
+              onChange={(e) => setUserCode({ ...userCode, code: e.target.value })}
               value={userCode.code}
               onFocus={() => setTouch(true)}
             />
@@ -62,7 +73,7 @@ export default function UserCode() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(userCodeErr).length === 0) {
-                  post("https://jsonplaceholder.typicode.com/posts", userCode);
+                  post("http://localhost:4000/auth/OTP-login", userCode);
                 } else {
                   notify();
                 }

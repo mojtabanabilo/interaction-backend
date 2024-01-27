@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import {
   ILoginData,
@@ -10,34 +10,39 @@ import { logInValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cookies from 'universal-cookie';
-
-
+import Cookies from "universal-cookie";
 
 export default function LogIn() {
   // cookie
   const cookies = new Cookies();
+
+  // navigator
+  const navigate = useNavigate();
 
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
     email: "",
     password: "",
   });
-  const [loginErr, setLoginErr] = useState<ILoginErrorValidation>({});
   const [touch, setTouch] = useState<ILoginTouch>({
     emailTouch: false,
     passwordTouch: false,
   });
-  const [statusCode, setStatusCode] = useState<number | null>(null);
-
+  const [loginErr, setLoginErr] = useState<ILoginErrorValidation>({});
+  const [data, setData] = useState<any>({});
 
   // lifecycle
   useEffect(() => {
     setLoginErr(logInValidation(loginData));
   }, [loginData]);
   useEffect(() => {
-    if (statusCode === 201) cookies.set('access-token', 'Pacman', {expires: new Date(Date.now() + 259200000)});
-  }, [statusCode])
+    if (data && data.status === 200) {
+      cookies.set("access-token", data.data.accessToken, {
+        expires: new Date(Date.now() + 259200000),
+      });
+      navigate("/panel", { replace: true });
+    }
+  }, [data]);
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -112,12 +117,12 @@ export default function LogIn() {
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={(e) => {
                 e.preventDefault();
-                if(Object.keys(loginErr).length === 0) {
+                if (Object.keys(loginErr).length === 0) {
                   post(
-                    "https://jsonplaceholder.typicode.com/posts",
+                    "http://localhost:4000/auth/login",
                     loginData,
                     undefined,
-                    setStatusCode
+                    setData
                   );
                 } else {
                   notify();

@@ -22,9 +22,10 @@ export interface ISignupTouch {
     passwordTouch: boolean
 }
 
-// ForgetPassword component
-export interface IForgetPassword {
-    emailForgetPassword: string
+// UserCode component
+export interface IUserCodeFetchData {
+    code: string
+    email: string | undefined
 }
 
 // Utils > functions > functions.ts

@@ -16,16 +16,16 @@ export default function OTPLogin() {
   });
   const [loginErr, setLoginErr] = useState<{ emailError?: string }>({});
   const [touch, setTouch] = useState<boolean>(false);
-  const [statusCode, setStatusCode] = useState<number>(0);
+  const [data, setData] = useState<any>({});
 
   // lifecycle
   useEffect(() => {
     setLoginErr(otpLoginValidation(loginData));
-    
-    if (statusCode === 201) {
-      navigate("/user-code", { replace: true });
-    }
-  }, [loginData, statusCode, navigate]);
+  }, [loginData]);
+  useEffect(() => {
+    if (data.status === 201 || data.status === 200)
+      navigate(`/user-code/${loginData.email}`, { replace: true });
+  }, [data.status]);
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -77,10 +77,10 @@ export default function OTPLogin() {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
                   post(
-                    "https://jsonplaceholder.typicode.com/posts",
+                    "http://localhost:4000/auth/OTP-login",
                     loginData,
                     undefined,
-                    setStatusCode
+                    setData
                   );
                 } else {
                   notify();

@@ -27,16 +27,15 @@ export default function SignUp() {
     emailTouch: false,
     passwordTouch: false,
   });
-  const [statusCode, setStatusCode] = useState<number | null>(null);
+  const [data, setData] = useState<any>({});
 
   // lifecycle
   useEffect(() => {
     setSignUpError(signUpValidation(signUpData));
-    console.log(statusCode);
   }, [signUpData]);
   useEffect(() => {
-    if(statusCode === 201) navigate('/log-in', { replace: true })
-  }, [statusCode])
+    if (data && data.status === 201) navigate("/log-in", { replace: true });
+  }, [data]);
 
   // navigator
   const navigate = useNavigate();
@@ -165,10 +164,10 @@ export default function SignUp() {
                   e.preventDefault();
                   if (Object.keys(signUpError).length === 0) {
                     post(
-                      "https://jsonplaceholder.typicode.com/posts",
+                      "http://localhost:4000/auth/register",
                       signUpData,
                       undefined,
-                      setStatusCode
+                      setData
                     );
                   } else {
                     notify();

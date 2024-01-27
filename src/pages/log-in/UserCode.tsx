@@ -6,8 +6,12 @@ import { IUserCodeFetchData } from "../../utils/types/interface";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Cookies from "universal-cookie";
 
 export default function UserCode() {
+  // cookie
+  const cookies = new Cookies();
+
   // params
   const { email } = useParams();  
 
@@ -16,13 +20,19 @@ export default function UserCode() {
     code: "",
     email: ""
   });
+  const [data, setData] = useState<any>({})
   const [userCodeErr, setUserCodeErr] = useState<{ codeError?: string }>({});
   const [touch, setTouch] = useState<boolean>(false);
 
   // lifecycle
   useEffect(() => {
-    console.log(userCode);
-  }, [userCode]);
+    console.log(data);
+    if(data && data.status === 200){
+      cookies.set("access-token-UserCode", data.data.AccessToken, {
+        expires: new Date(Date.now() + 259200000),
+      });
+    }
+  }, [data]);
   useEffect(() => {
     setUserCodeErr(userCodeValidation(userCode));
   }, [userCode.code]);
@@ -73,7 +83,7 @@ export default function UserCode() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(userCodeErr).length === 0) {
-                  post("http://localhost:4000/auth/OTP-login", userCode);
+                  post("http://localhost:4000/auth/OTP-login", userCode, undefined, setData);
                 } else {
                   notify();
                 }

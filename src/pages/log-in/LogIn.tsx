@@ -37,7 +37,7 @@ export default function LogIn() {
   }, [loginData]);
   useEffect(() => {
     if (data && data.status === 200) {
-      cookies.set("access-token", data.data.accessToken, {
+      cookies.set("access-token-Login", data.data.accessToken, {
         expires: new Date(Date.now() + 259200000),
       });
       navigate("/panel", { replace: true });

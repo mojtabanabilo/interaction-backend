@@ -1,10 +1,13 @@
 import React from 'react';
 
+// components
+import Header from '../../components/header/Header';
+
 export default function Panel() {
     return (
-        <div className='w-full h-full flex flex-col justify-center items-center'>
-            <h1>panel</h1>
-        </div>
+        <>
+            <Header />
+        </>
     );
 };
 

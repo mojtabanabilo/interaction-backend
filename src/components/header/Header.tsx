@@ -11,11 +11,14 @@ export default function Header() {
           className="w-10 h-10 md:w-14 md:h-14"
           alt="tailwind"
         />
-        <h1 className="text-xl md:text-2xl font-bold text-gray-400 mx-4">Panel</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-400 mx-4">
+          Panel
+        </h1>
       </div>
       <ul className="flex justify-between items-center [&>*]:mx-2 text-base font-semibold text-gray-400 [&>*]:cursor-pointer">
-        <li className="hover:text-blue-500 transition">SignUp</li>
-        <li className="hover:text-blue-500 transition">Login</li>
+        <Link to={"/sign-in"}>
+          <li className="hover:text-blue-500 transition">SignUp</li>
+        </Link>
       </ul>
     </header>
   );

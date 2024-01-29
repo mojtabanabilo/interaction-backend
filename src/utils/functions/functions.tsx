@@ -1,10 +1,13 @@
 import { toast } from "react-toastify";
+import { Outlet, Navigate } from "react-router-dom";
 import {
   ISignupErrorValidation,
   ISignupData,
   ILoginErrorValidation,
   ILoginData,
 } from "../types/interface";
+import Cookies from "universal-cookie";
+import { FC } from "react";
 
 export const signUpValidation: Function = (
   data: ISignupData
@@ -106,3 +109,13 @@ export const userCodeValidation: Function = (data: {
 
   return objError;
 };
+
+// PRIVATE ROUTE -------------------------------
+export const PrivateRoutes : any = () => {
+  const cookie = new Cookies();
+  let cookieStatus = cookie.get('access-token-Login');
+  return (
+    cookieStatus !== undefined ? <Outlet /> : <Navigate to={'sign-in'}/>
+  )
+}
+// PRIVATE ROUTE -------------------------------

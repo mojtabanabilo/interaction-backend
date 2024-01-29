@@ -15,7 +15,7 @@ import Cookies from "universal-cookie";
 export default function LogIn() {
   // cookie
   const cookies = new Cookies();
-
+  
   // navigator
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function LogIn() {
       cookies.set("access-token-Login", data.data.accessToken, {
         expires: new Date(Date.now() + 259200000),
       });
-      navigate("/panel", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [data]);
 

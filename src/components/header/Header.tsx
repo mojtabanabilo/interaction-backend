@@ -8,14 +8,14 @@ export default function Header() {
       <div className="flex justify-evenly items-center">
         <img
           src={imageTailWind}
-          className="w-14 h-14 sm:w-10 sm:h-10"
+          className="w-10 h-10 md:w-14 md:h-14"
           alt="tailwind"
         />
-        <h1 className="text-2xl sm:text-xl font-bold text-gray-400 mx-4">Panel</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-400 mx-4">Panel</h1>
       </div>
       <ul className="flex justify-between items-center [&>*]:mx-2 text-base font-semibold text-gray-400 [&>*]:cursor-pointer">
-        <li>SignUp</li>
-        <li>Login</li>
+        <li className="hover:text-blue-500 transition">SignUp</li>
+        <li className="hover:text-blue-500 transition">Login</li>
       </ul>
     </header>
   );

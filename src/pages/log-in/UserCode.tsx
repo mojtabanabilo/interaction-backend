@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import { userCodeValidation } from "../../utils/functions/functions";
 import { IUserCodeFetchData } from "../../utils/types/interface";
@@ -11,6 +11,9 @@ import Cookies from "universal-cookie";
 export default function UserCode() {
   // cookie
   const cookies = new Cookies();
+
+  // navigator
+  const navigate = useNavigate();
 
   // params
   const { email } = useParams();  
@@ -31,6 +34,7 @@ export default function UserCode() {
       cookies.set("access-token-UserCode", data.data.AccessToken, {
         expires: new Date(Date.now() + 259200000),
       });
+      navigate("/", { replace: true });
     }
   }, [data]);
   useEffect(() => {

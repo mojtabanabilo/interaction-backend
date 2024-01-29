@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { PrivateRoutes } from "./utils/functions/functions";
 import './App.css';
 
 // pages
@@ -17,8 +18,10 @@ export default function App() {
       <Suspense fallback>
         <Router>
           <Routes>
-            <Route path='/panel' element={<Panel />}/>
-            <Route path='/sign-in' element={<SignIn />}/>
+            <Route element={<PrivateRoutes />}>
+              <Route path='/' element={<Panel />}/>
+            </Route>
+            <Route path='/sign-in' element={<SignIn />} index/>
             <Route path='/log-in' element={<LogIn />}/>
             <Route path='/otp-login' element={<OTPLogin />}/>
             <Route path='/user-code/:email' element={<UserCode />}/>

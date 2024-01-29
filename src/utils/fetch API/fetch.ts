@@ -15,5 +15,6 @@ export const post = (
     })
     .catch((er) => {
       setError && setError(er);
+      console.log(er);
     });
 };

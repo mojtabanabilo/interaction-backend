@@ -21,6 +21,9 @@ export default {
 
       'sm': {'min': '639px'},
       // => @media (min-width: 639px) { ... }
+
+      'xs': {'min': '450px'},
+      // => @media (min-width: 450px) { ... }
     },
   },
   plugins: [],

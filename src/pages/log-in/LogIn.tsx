@@ -145,7 +145,7 @@ export default function LogIn() {
         <p className="mt-2 text-center text-sm text-gray-500">
           i want a new account.{" "}
           <Link
-            to={"/sign-in"}
+            to={"/sign-up"}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             Sign-In

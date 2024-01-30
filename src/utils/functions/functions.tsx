@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { Dispatch, SetStateAction } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import {
   ISignupErrorValidation,
@@ -7,7 +7,6 @@ import {
   ILoginData,
 } from "../types/interface";
 import Cookies from "universal-cookie";
-import { FC } from "react";
 
 export const signUpValidation: Function = (
   data: ISignupData
@@ -115,7 +114,18 @@ export const PrivateRoutes : any = () => {
   const cookie = new Cookies();
   let cookieStatus = cookie.get('access-token-Login');
   return (
-    cookieStatus !== undefined ? <Outlet /> : <Navigate to={'sign-in'}/>
+    cookieStatus !== undefined ? <Outlet /> : <Navigate to={'sign-up'}/>
   )
 }
 // PRIVATE ROUTE -------------------------------
+
+// SET STATE RESIZE - SIDEBAR COMPONENT ------------------------------
+export const setStateResize : Function = (setData : Dispatch<SetStateAction<number>>) : any => {
+  const handleResizeWindow : any = () => setData(window.innerWidth);
+  handleResizeWindow();
+  window.addEventListener("resize", handleResizeWindow);
+  return () => {
+     window.removeEventListener("resize", handleResizeWindow);
+  };
+}
+// SET STATE RESIZE FOR SIDEBAR COMPONENT ------------------------------

@@ -4,7 +4,7 @@ import { PrivateRoutes } from "./utils/functions/functions";
 import './App.css';
 
 // pages
-const SignIn : any = lazy(() => import('./pages/sign-up/SignUp'));
+const SignUp : any = lazy(() => import('./pages/sign-up/SignUp'));
 const LogIn : any = lazy(() => import('./pages/log-in/LogIn'));
 const OTPLogin : any = lazy(() => import('./pages/log-in/OTPLogin'));
 const UserCode : any = lazy(() => import('./pages/log-in/UserCode'));
@@ -14,14 +14,14 @@ const Panel : any = lazy(() => import('./pages/panel/Panel'));
 export default function App() {
 
   return (
-    <main className='w-screen h-screen'>
+    <main className='min-w-min h-screen'>
       <Suspense fallback>
         <Router>
           <Routes>
             <Route element={<PrivateRoutes />}>
               <Route path='/' element={<Panel />}/>
             </Route>
-            <Route path='/sign-in' element={<SignIn />} index/>
+            <Route path='/sign-up' element={<SignUp />} index/>
             <Route path='/log-in' element={<LogIn />}/>
             <Route path='/otp-login' element={<OTPLogin />}/>
             <Route path='/user-code/:email' element={<UserCode />}/>

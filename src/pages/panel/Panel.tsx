@@ -2,14 +2,12 @@ import React from 'react';
 
 // components
 import Header from '../../components/header/Header';
-import Sidebar from '../../components/sidebar/Sidebar';
 
 export default function Panel() {
     return (
-        <>
+        <section className='w-full h-full'>
             <Header />
-            <Sidebar />
-        </>
+        </section>
     );
 };
 

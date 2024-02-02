@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import imageTailWind from "../../assets/icons8-tailwind-css-96.png";
 import { setStateResize } from "../../utils/functions/functions";
+import Cookies from "universal-cookie";
 
 // components
 import Sidebar from "../sidebar/Sidebar";
 import DropDownMenu from "../drop-down-menu/DropDownMenu";
 
 export default function Header() {
+  // cookie
+  const cookie = new Cookies();
+
   // states
   const [open, setOpen] = useState<boolean>(false);
   const [screenSize, setScreenSize] = useState<number>(0);
@@ -47,7 +51,7 @@ export default function Header() {
             />
           </svg>
           <ul className="hidden sm:block flex justify-between items-center [&>*]:mx-2 text-base font-semibold text-gray-400 [&>*]:cursor-pointer">
-            <Link to={"/sign-up"}>
+            <Link to={"/sign-up"} onClick={() => cookie.remove('access-token-Login')}>
               <li className="hover:text-blue-500 transition">Logout</li>
             </Link>
           </ul>

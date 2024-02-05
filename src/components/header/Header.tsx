@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import imageTailWind from "../../assets/icons8-tailwind-css-96.png";
 import { setStateResize } from "../../utils/functions/functions";
 import Cookies from "universal-cookie";
@@ -8,9 +8,16 @@ import Cookies from "universal-cookie";
 import Sidebar from "../sidebar/Sidebar";
 import DropDownMenu from "../drop-down-menu/DropDownMenu";
 
+// icon
+import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
+
 export default function Header() {
   // cookie
   const cookie = new Cookies();
+
+  // navigator
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // states
   const [open, setOpen] = useState<boolean>(false);
@@ -51,11 +58,25 @@ export default function Header() {
             />
           </svg>
           <ul className="hidden sm:block flex justify-between items-center [&>*]:mx-2 text-base font-semibold text-gray-400 [&>*]:cursor-pointer">
-            <Link to={"/sign-up"} onClick={() => cookie.remove('access-token-Login')}>
+            <Link
+              to={"/sign-up"}
+              onClick={() => cookie.remove("access-token-Login")}
+            >
               <li className="hover:text-blue-500 transition">Logout</li>
             </Link>
           </ul>
           <DropDownMenu />
+          <div className="hidden sm:flex justify-center items-center space-x-1 overflow-hidden cursor-pointer">
+            {/* <div className="flex flex-col justify-center items-end space-x-1 overflow-hidden cursor-pointer">
+              <p className="text-gray-800 text-lg">mojtaba nabilo</p>
+              <p className="text-gray-500 text-base font-semibold">admin</p>
+            </div> */}
+            <img
+              className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+              src={userProfile}
+              alt="user-profile"
+            />
+          </div>
         </div>
       </header>
       {screenSize < 639 && open && <Sidebar show={{ open, setOpen }} />}

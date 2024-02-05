@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction } from "react";
-import { Outlet, Navigate } from "react-router-dom";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { Outlet, Navigate, useLocation, Route } from "react-router-dom";
 import {
   ISignupErrorValidation,
   ISignupData,

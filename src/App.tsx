@@ -15,7 +15,7 @@ const EditUser : any = lazy(() => import('./pages/edit-user/EditUser'));
 export default function App() {
 
   return (
-    <main className='min-w-min h-screen flex justify-center items-center'>
+    <main className='w-screen min-h-screen flex justify-center items-center overflow-auto'>
       <Suspense fallback>
         <Router>
           <Routes>

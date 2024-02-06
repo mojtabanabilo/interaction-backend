@@ -6,7 +6,7 @@ import Table from '../../pages/table/Tables';
 
 export default function Panel() {
     return (
-        <section className='w-full h-full flex flex-col justify-start items-center'>
+        <section className='w-full min-h-screen flex flex-col justify-start items-center'>
             <Header />
             <Table />
         </section>

@@ -2,32 +2,6 @@ import { useState, useEffect } from "react";
 import { setStateResize } from "../../utils/functions/functions";
 import styles from "./style/tables.module.scss";
 
-const data = [
-  {
-    firstName: "user1",
-    lastName: "user1",
-    email: "mojjtaba00@gmail.com",
-    accessLevel: "admin",
-  },
-  {
-    firstName: "user2",
-    lastName: "user1",
-    email: "mojjtaba00@gmail.com",
-    accessLevel: "admin",
-  },
-  {
-    firstName: "user3",
-    lastName: "user1",
-    email: "mojjtaba00@gmail.com",
-    accessLevel: "admin",
-  },
-  {
-    firstName: "user4",
-    lastName: "user1",
-    email: "mojjtaba00@gmail.com",
-    accessLevel: "admin",
-  },
-];
 
 // component
 import TBodyTable from "./TBodyTable";

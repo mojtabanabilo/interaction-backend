@@ -10,16 +10,18 @@ const OTPLogin : any = lazy(() => import('./pages/log-in/OTPLogin'));
 const UserCode : any = lazy(() => import('./pages/log-in/UserCode'));
 const NotFound : any = lazy(() => import('./pages/not-found/NotFound'));
 const Panel : any = lazy(() => import('./pages/panel/Panel'));
+const EditUser : any = lazy(() => import('./pages/edit-user/EditUser'));
 
 export default function App() {
 
   return (
-    <main className='min-w-min h-screen'>
+    <main className='min-w-min h-screen flex justify-center items-center'>
       <Suspense fallback>
         <Router>
           <Routes>
             <Route element={<PrivateRoutes />}>
               <Route path='/' element={<Panel />}/>
+              <Route path='/edit-user' element={<EditUser />}/>
             </Route>
             <Route path='/sign-up' element={<SignUp />} index/>
             <Route path='/log-in' element={<LogIn />}/>

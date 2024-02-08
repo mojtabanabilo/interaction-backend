@@ -39,3 +39,10 @@ export interface ILoginErrorValidation {
     emailError?: string
     passwordError?: string
 }
+
+// INITIAL STATE >> features/features.ts
+export interface IinitialStateFetchPost {
+    loading?: boolean
+    data?: any
+    errorMsg?: string
+}

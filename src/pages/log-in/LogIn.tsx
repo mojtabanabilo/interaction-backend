@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
-import {
-  ILoginData,
-  ILoginTouch,
-  ILoginErrorValidation,
-} from "../../utils/types/interface";
+import { ILoginData, ILoginTouch, ILoginErrorValidation } from "../../utils/types/interface";
 import { logInValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
+import { useAppDispatch } from "../../utils/functions/functions";
 
 export default function LogIn() {
+  // redux-hooks
+  const dispatch = useAppDispatch();
+
   // cookie
   const cookies = new Cookies();
   
@@ -118,12 +118,12 @@ export default function LogIn() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
-                  post(
-                    "http://localhost:4000/auth/login",
-                    loginData,
-                    undefined,
-                    setData
-                  );
+                  // post(
+                  //   "http://localhost:4000/auth/login",
+                  //   loginData,
+                  //   undefined,
+                  //   setData
+                  // );
                 } else {
                   notify();
                 }

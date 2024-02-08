@@ -11,8 +11,13 @@ import { signUpValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAppDispatch } from '../../utils/functions/functions';
+import { postDataSignup } from "../../features/fetch-post/fetchPostSignup";
 
 export default function SignUp() {
+  // redux-hooks
+  const dispatch = useAppDispatch();
+
   // states
   const [signUpData, setSignUpData] = useState<ISignupData>({
     firstName: "",
@@ -163,12 +168,13 @@ export default function SignUp() {
                 onClick={(e) => {
                   e.preventDefault();
                   if (Object.keys(signUpError).length === 0) {
-                    post(
-                      "http://localhost:4000/auth/register",
-                      signUpData,
-                      undefined,
-                      setData
-                    );
+                    // post(
+                    //   "http://localhost:4000/auth/register",
+                    //   signUpData,
+                    //   undefined,
+                    //   setData
+                    // );
+                    dispatch(postDataSignup(signUpData))
                   } else {
                     notify();
                   }

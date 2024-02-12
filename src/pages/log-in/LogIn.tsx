@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
+import spinner from "../../assets/Rolling-1s-31px.gif";
 import {
   ILoginData,
   ILoginTouch,
@@ -148,7 +149,11 @@ export default function LogIn() {
                 }
               }}
             >
-              Login
+              {selector.postData.loading ? (
+                  <img className="w-6 h-6" src={spinner} alt="loading..." />
+                ) : (
+                  "Login"
+                )}
             </button>
           </div>
         </form>

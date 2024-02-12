@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
+import spinner from "../../assets/Rolling-1s-31px.gif";
 import { userCodeValidation } from "../../utils/functions/functions";
 import { IUserCodeFetchData } from "../../utils/types/interface";
 import { post } from "../../utils/fetch API/fetch";
@@ -114,7 +115,11 @@ export default function UserCode() {
                 }
               }}
             >
-              Login
+              {selector.postData.loading ? (
+                  <img className="w-6 h-6" src={spinner} alt="loading..." />
+                ) : (
+                  "Login"
+                )}
             </button>
           </div>
         </form>

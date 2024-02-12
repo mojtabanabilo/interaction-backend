@@ -1,21 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
-import { ILoginData, ILoginTouch, ILoginErrorValidation } from "../../utils/types/interface";
+import {
+  ILoginData,
+  ILoginTouch,
+  ILoginErrorValidation,
+} from "../../utils/types/interface";
 import { logInValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/functions/functions";
+import { postData } from "../../features/fetch-post/fetchPost";
 import Cookies from "universal-cookie";
-import { useAppDispatch } from "../../utils/functions/functions";
 
 export default function LogIn() {
+  // cookies
+  const cookies = new Cookies();
+
   // redux-hooks
   const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state);
 
-  // cookie
-  const cookies = new Cookies();
-  
   // navigator
   const navigate = useNavigate();
 
@@ -29,20 +38,24 @@ export default function LogIn() {
     passwordTouch: false,
   });
   const [loginErr, setLoginErr] = useState<ILoginErrorValidation>({});
-  const [data, setData] = useState<any>({});
 
   // lifecycle
   useEffect(() => {
     setLoginErr(logInValidation(loginData));
   }, [loginData]);
   useEffect(() => {
-    if (data && data.status === 200) {
-      cookies.set("access-token-Login", data.data.accessToken, {
-        expires: new Date(Date.now() + 259200000),
-      });
+    if (
+      selector.postData.data[0]?.status === 200 &&
+      selector.postData.data[0].data.accessToken
+    ) {
+      cookies.set(
+        "access-token-login",
+        selector.postData.data[0].data.accessToken,
+        { expires: new Date(Date.now() + 2592000) }
+      );
       navigate("/", { replace: true });
     }
-  }, [data]);
+  }, [selector]);
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -124,6 +137,12 @@ export default function LogIn() {
                   //   undefined,
                   //   setData
                   // );
+                  dispatch(
+                    postData({
+                      api: "http://localhost:4000/auth/login",
+                      data: loginData,
+                    })
+                  );
                 } else {
                   notify();
                 }
@@ -148,7 +167,7 @@ export default function LogIn() {
             to={"/sign-up"}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
-            Sign-In
+            Sign-Up
           </Link>
         </p>
       </div>

@@ -7,42 +7,56 @@ import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/functions/functions";
+import { postData } from "../../features/fetch-post/fetchPost";
 
 export default function UserCode() {
   // cookie
   const cookies = new Cookies();
 
+  // redux-hooks
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state);
+
   // navigator
   const navigate = useNavigate();
 
   // params
-  const { email } = useParams();  
+  const { email } = useParams();
 
   //states
   const [userCode, setUserCode] = useState<IUserCodeFetchData>({
     code: "",
-    email: ""
+    email: "",
   });
-  const [data, setData] = useState<any>({})
   const [userCodeErr, setUserCodeErr] = useState<{ codeError?: string }>({});
   const [touch, setTouch] = useState<boolean>(false);
 
   // lifecycle
   useEffect(() => {
-    console.log(data);
-    if(data && data.status === 200){
-      cookies.set("access-token-UserCode", data.data.AccessToken, {
-        expires: new Date(Date.now() + 259200000),
-      });
+    if (
+      selector.postData.data[1]?.status === 200 &&
+      selector.postData.data[1]?.data.AccessToken
+    ) {
+      cookies.set(
+        "access-token-login",
+        selector.postData.data[1]?.data.AccessToken,
+        {
+          expires: new Date(Date.now() + 259200000),
+        }
+      );
       navigate("/", { replace: true });
     }
-  }, [data]);
+  }, [selector]);
   useEffect(() => {
     setUserCodeErr(userCodeValidation(userCode));
   }, [userCode.code]);
   useEffect(() => {
-    setUserCode({...userCode, email: email})
-  }, [email])
+    setUserCode({ ...userCode, email: email });
+  }, [email]);
 
   // toastify
   const notify = () => toast.error("Invalid Data !");
@@ -69,7 +83,9 @@ export default function UserCode() {
               required
               placeholder="code (OTP)"
               className="outline-none block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              onChange={(e) => setUserCode({ ...userCode, code: e.target.value })}
+              onChange={(e) =>
+                setUserCode({ ...userCode, code: e.target.value })
+              }
               value={userCode.code}
               onFocus={() => setTouch(true)}
             />
@@ -87,7 +103,12 @@ export default function UserCode() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(userCodeErr).length === 0) {
-                  post("http://localhost:4000/auth/OTP-login", userCode, undefined, setData);
+                  dispatch(
+                    postData({
+                      api: "http://localhost:4000/auth/OTP-login",
+                      data: userCode,
+                    })
+                  );
                 } else {
                   notify();
                 }

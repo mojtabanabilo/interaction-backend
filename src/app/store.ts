@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import fetchPost from "../features/fetch-post/fetchPostSignup";
+import fetchPostData from "../features/fetch-post/fetchPost";
 // import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
 
 const store: any = configureStore({
   reducer: {
-    postData: fetchPost.reducer,
+    postData: fetchPostData.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

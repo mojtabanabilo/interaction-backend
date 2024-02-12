@@ -5,8 +5,21 @@ import { otpLoginValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/functions/functions";
+import { postData } from "../../features/fetch-post/fetchPost";
+import Cookies from "universal-cookie";
 
 export default function OTPLogin() {
+  // cookie
+  const cookie = new Cookies();
+
+  // redux-hooks
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state);
+
   //navigator
   const navigate = useNavigate();
 
@@ -16,19 +29,18 @@ export default function OTPLogin() {
   });
   const [loginErr, setLoginErr] = useState<{ emailError?: string }>({});
   const [touch, setTouch] = useState<boolean>(false);
-  const [data, setData] = useState<any>({});
 
   // lifecycle
   useEffect(() => {
     setLoginErr(otpLoginValidation(loginData));
   }, [loginData]);
   useEffect(() => {
-    if (data.status === 201 || data.status === 200)
-      navigate(`/user-code/${loginData.email}`, { replace: true });
-  }, [data.status]);
+    if (selector.postData.data[0]?.status === 200)
+      navigate(`/user-code/${selector.postData.data[0].data.email}`, { replace: true });
+  }, [selector]);
 
   // toastify
-  const notify = () => toast.error("Invalid Data !");
+  const notify: Function = () => toast.error("Invalid Data !");
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -76,11 +88,12 @@ export default function OTPLogin() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
-                  post(
-                    "http://localhost:4000/auth/OTP-login",
-                    loginData,
-                    undefined,
-                    setData
+                  console.log(selector);
+                  dispatch(
+                    postData({
+                      api: "http://localhost:4000/auth/OTP-login",
+                      data: loginData,
+                    })
                   );
                 } else {
                   notify();

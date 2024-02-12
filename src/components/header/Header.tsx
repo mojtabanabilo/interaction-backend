@@ -13,7 +13,7 @@ import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
 
 export default function Header() {
   // cookie
-  const cookie = new Cookies();
+  const cookies = new Cookies(null);
 
   // navigator
   const navigate = useNavigate();
@@ -60,7 +60,9 @@ export default function Header() {
           <ul className="hidden sm:block flex justify-between items-center [&>*]:mx-2 text-base font-semibold text-gray-400 [&>*]:cursor-pointer">
             <Link
               to={"/sign-up"}
-              onClick={() => cookie.remove("access-token-Login")}
+              onClick={() => {
+                cookies.remove("access-token-login", { path: "/" });
+              }}
             >
               <li className="hover:text-blue-500 transition">Logout</li>
             </Link>

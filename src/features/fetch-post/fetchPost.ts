@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ISignupData, IinitialStateFetchPost } from "../../utils/types/interface";
+import { ISignupData, IinitialStateFetchPost, ILoginData, IUserCodeFetchData } from "../../utils/types/interface";
 import axios from "axios";
 
 const initialState : IinitialStateFetchPost = {
@@ -8,26 +8,26 @@ const initialState : IinitialStateFetchPost = {
     errorMsg: ""
 }
 
-const postDataSignup = createAsyncThunk('fetchPostSignup/fetch-post', (data : ISignupData)  => {
-    axios.post('http://localhost:4000/auth/register', data)
+const postData = createAsyncThunk('fetchPostData/fetch-post', (api : {api: string , data: ISignupData | ILoginData | IUserCodeFetchData | { email: string }}) => {
+    return axios.post(api.api, api.data)
     .then(res => res)
     .catch(err => err)
 })
 
-const fetchPostSignup = createSlice({
-    name: 'fetchPostSignup',
+const fetchPostData = createSlice({
+    name: 'fetchPostData',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(postDataSignup.pending, (state) => {
+        builder.addCase(postData.pending, (state) => {
             state.loading = true;
         })
-        builder.addCase(postDataSignup.fulfilled, (state, action) => {
+        builder.addCase(postData.fulfilled, (state, action) => {
             state.loading = false;
             state.data.push(action.payload);
             state.errorMsg = "";
         })
-        builder.addCase(postDataSignup.rejected, (state, action) => {
+        builder.addCase(postData.rejected, (state, action) => {
             state.loading = false;
             state.data = [];
             state.errorMsg = action.error.message;
@@ -35,5 +35,5 @@ const fetchPostSignup = createSlice({
     }
 })
 
-export default fetchPostSignup;
-export { postDataSignup }
+export default fetchPostData;
+export { postData }

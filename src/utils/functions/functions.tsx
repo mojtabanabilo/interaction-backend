@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
 import { Outlet, Navigate, useLocation, Route } from "react-router-dom";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   ISignupErrorValidation,
   ISignupData,
@@ -113,11 +113,11 @@ export const userCodeValidation: Function = (data: {
 };
 
 // PRIVATE ROUTE -------------------------------
+const cookie = new Cookies();
 export const PrivateRoutes : any = () => {
-  const cookie = new Cookies();
-  let cookieStatus = cookie.get('access-token-Login');
+  const cookieStatus = cookie.get('access-token-login');
   return (
-    cookieStatus !== undefined ? <Outlet /> : <Navigate to={'sign-up'}/>
+    cookieStatus ? <Outlet/> : <Navigate to={'/sign-up'}/>
   )
 }
 // PRIVATE ROUTE -------------------------------

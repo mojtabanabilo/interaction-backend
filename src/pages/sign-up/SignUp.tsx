@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
-import spinner from "../../assets/Rolling-1.1s-244px.gif";
+import spinner from "../../assets/Rolling-1s-31px.gif";
 import {
   ISignupData,
   ISignupErrorValidation,
@@ -11,12 +11,26 @@ import { signUpValidation } from "../../utils/functions/functions";
 import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAppDispatch } from '../../utils/functions/functions';
-import { postDataSignup } from "../../features/fetch-post/fetchPostSignup";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/functions/functions";
+import { postData } from "../../features/fetch-post/fetchPost";
+import Cookies from "universal-cookie";
 
 export default function SignUp() {
+  // cookie
+  const cookies = new Cookies();
+
   // redux-hooks
   const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state);
+
+  // navigator
+  const navigate = useNavigate();
+
+  // toastify
+  const notify = () => toast.error("Invalid Data !");
 
   // states
   const [signUpData, setSignUpData] = useState<ISignupData>({
@@ -39,14 +53,13 @@ export default function SignUp() {
     setSignUpError(signUpValidation(signUpData));
   }, [signUpData]);
   useEffect(() => {
-    if (data && data.status === 201) navigate("/log-in", { replace: true });
-  }, [data]);
-
-  // navigator
-  const navigate = useNavigate();
-
-  // toastify
-  const notify = () => toast.error("Invalid Data !");
+    if (
+      selector.postData.data[0] !== undefined &&
+      selector.postData.data[0].data.statusCode === 201
+    )
+      navigate("/log-in");
+    // console.log(selector);
+  }, [selector]);
 
   return (
     <div className="w-full h-full flex justify-center items-canter">
@@ -168,19 +181,22 @@ export default function SignUp() {
                 onClick={(e) => {
                   e.preventDefault();
                   if (Object.keys(signUpError).length === 0) {
-                    // post(
-                    //   "http://localhost:4000/auth/register",
-                    //   signUpData,
-                    //   undefined,
-                    //   setData
-                    // );
-                    dispatch(postDataSignup(signUpData))
+                    dispatch(
+                      postData({
+                        api: "http://localhost:4000/auth/register",
+                        data: signUpData,
+                      })
+                    );
                   } else {
                     notify();
                   }
                 }}
               >
-                Create account
+                {selector.postData.loading ? (
+                  <img className="w-6 h-6" src={spinner} alt="loading..." />
+                ) : (
+                  "Create account"
+                )}
               </button>
             </div>
           </form>

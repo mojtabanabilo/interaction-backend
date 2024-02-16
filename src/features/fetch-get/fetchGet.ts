@@ -1,39 +1,48 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IinitialStateFetchGet } from "../../utils/types/interface";
 import axios from "axios";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const initialState: IinitialStateFetchGet = {
-    loading: false,
-    data: [],
-    errorMsg: ''
+  loading: false,
+  data: [],
+  errorMsg: "",
 };
 
-const getData = createAsyncThunk('fetchGetData/fetch-get', async() => {
-    return axios.get('http://localhost:4000/user')
-    .then(res => res)
-    .catch(err => err)
-})
+const getData = createAsyncThunk(
+  "fetchGetData/fetch-get",
+  async (api: string) => {
+    return axios
+      .get(api, {
+        headers: {
+          Authorization: "Bearer " + cookies.get("access-token-login"),
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
 
 const fetchGetData = createSlice({
   name: "fetchGetData",
   initialState,
   reducers: {},
-  extraReducers: builder => {
-      builder.addCase(getData.pending, state => {
-        state.loading = true;
-      });
-      builder.addCase(getData.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data.push(action.payload);
-        state.errorMsg = '';
-      });
-      builder.addCase(getData.rejected, (state ,action) => {
-        state.loading = false;
-        state.data = [],
-        state.errorMsg = action.error.message;
-      })
+  extraReducers: (builder) => {
+    builder.addCase(getData.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getData.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data.push(action.payload);
+      state.errorMsg = "";
+    });
+    builder.addCase(getData.rejected, (state, action) => {
+      state.loading = false;
+      (state.data = []), (state.errorMsg = action.error.message);
+    });
   },
 });
 
-export default fetchGetData
+export default fetchGetData;
 export { getData };

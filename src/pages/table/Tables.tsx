@@ -25,7 +25,7 @@ export default function Table() {
             <th className={styles.th_thead_product}>First Name</th>
             <th className={styles.th_thead_product}>Last Name</th>
             <th className={styles.th_thead_product}>Email</th>
-            <th className={styles.th_thead_product}>Access-Level</th>
+            <th className={styles.th_thead_product}>Role</th>
             <th className={styles.th_thead_product}>Edit</th>
           </tr>
         </thead>

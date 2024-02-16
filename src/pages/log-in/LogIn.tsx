@@ -8,7 +8,6 @@ import {
   ILoginErrorValidation,
 } from "../../utils/types/interface";
 import { logInValidation } from "../../utils/functions/functions";
-import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -17,18 +16,21 @@ import {
 } from "../../utils/functions/functions";
 import { postData } from "../../features/fetch-post/fetchPost";
 import Cookies from "universal-cookie";
+import { JwtPayload, jwtDecode } from "jwt-decode";
+
 
 export default function LogIn() {
   // cookies
   const cookies = new Cookies();
-
+  
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
+  const { data, loading } = selector.postData;
 
   // navigator
   const navigate = useNavigate();
-
+  
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
     email: "",
@@ -46,12 +48,19 @@ export default function LogIn() {
   }, [loginData]);
   useEffect(() => {
     if (
-      selector.postData.data[0]?.status === 200 &&
-      selector.postData.data[0].data.accessToken
-    ) {
+      data[data.length - 1]?.status === 200 &&
+      data[data.length - 1]?.data.accessToken
+      ) {
+      const decodedToken = jwtDecode<any>(data[data.length - 1]?.data.accessToken);
+      console.log(decodedToken);
+      console.log(new Date(decodedToken.iat));
+      console.log(new Date(decodedToken.exp));
+      console.log(new Date(decodedToken?.exp).getMilliseconds());
+      
+      
       cookies.set(
         "access-token-login",
-        selector.postData.data[0].data.accessToken,
+        data[data.length - 1].data.accessToken,
         { expires: new Date(Date.now() + 2592000) }
       );
       navigate("/", { replace: true });
@@ -132,12 +141,6 @@ export default function LogIn() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
-                  // post(
-                  //   "http://localhost:4000/auth/login",
-                  //   loginData,
-                  //   undefined,
-                  //   setData
-                  // );
                   dispatch(
                     postData({
                       api: "http://localhost:4000/auth/login",
@@ -149,7 +152,7 @@ export default function LogIn() {
                 }
               }}
             >
-              {selector.postData.loading ? (
+              {loading ? (
                   <img className="w-6 h-6" src={spinner} alt="loading..." />
                 ) : (
                   "Login"

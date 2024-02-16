@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import styles from "./style/tbodytable.module.scss";
 import { setStateResize } from "../../utils/functions/functions";
 import { getData } from "../../features/fetch-get/fetchGet";
-import { useAppDispatch, useAppSelector } from "../../utils/functions/functions";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/functions/functions";
 
 const data = [
   {
@@ -34,15 +37,15 @@ const data = [
 export default function TBodyTable() {
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector(state => state);
+  const selector = useAppSelector((state) => state);
+  const { data } = selector.getData;
 
   // states
   const [userWidth, setUserWidth] = useState<number>(0);
 
   // lifecycle
   useEffect(() => {
-    dispatch(getData());
-    console.log(selector.getData.data);
+    dispatch(getData("http://localhost:4000/user"));
   }, []);
   useEffect(() => {
     setStateResize(setUserWidth);
@@ -50,15 +53,15 @@ export default function TBodyTable() {
 
   return (
     <>
-      {data.length > 0 &&
+      {data[data.length - 1]?.data.length > 0 &&
         userWidth > 650 &&
-        data.map((item, index) => (
-          <tr className={styles.tr_product_body} key={item.email}>
+        data[data.length - 1]?.data.map((item: any, index: number) => (
+          <tr className={styles.tr_product_body} key={item.id}>
             <td>{index + 1}</td>
             <td>{item.firstName}</td>
             <td>{item.lastName}</td>
             <td>{item.email}</td>
-            <td>{item.accessLevel}</td>
+            <td>{item.role}</td>
             <td className={styles.td_icon}>
               <div className={styles.icon_container_edit}>
                 <svg
@@ -97,13 +100,13 @@ export default function TBodyTable() {
         ))}
       {data.length > 0 &&
         userWidth < 650 &&
-        data.map((item, index) => (
-          <tr className={styles.tr_product_body} key={item.email}>
+        data[data.length - 1]?.data.map((item: any, index: number) => (
+          <tr className={styles.tr_product_body} key={item.id}>
             <td data-cell="Row">{index + 1}</td>
             <td data-cell="First Name">{item.firstName}</td>
             <td data-cell="Last Name">{item.lastName}</td>
             <td data-cell="Email">{item.email}</td>
-            <td data-cell="Access-Level">{item.accessLevel}</td>
+            <td data-cell="Access-Level">{item.role}</td>
             <td className={styles.td_icon}>
               <div className={styles.icon_container_edit}>
                 <svg

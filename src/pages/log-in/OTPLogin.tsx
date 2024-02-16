@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import { otpLoginValidation } from "../../utils/functions/functions";
-import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -11,15 +10,12 @@ import {
   useAppSelector,
 } from "../../utils/functions/functions";
 import { postData } from "../../features/fetch-post/fetchPost";
-import Cookies from "universal-cookie";
 
 export default function OTPLogin() {
-  // cookie
-  const cookie = new Cookies();
-
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
+  const { data, loading } = selector.postData;
 
   //navigator
   const navigate = useNavigate();
@@ -36,8 +32,10 @@ export default function OTPLogin() {
     setLoginErr(otpLoginValidation(loginData));
   }, [loginData]);
   useEffect(() => {
-    if (selector.postData.data[0]?.status === 200)
-      navigate(`/user-code/${selector.postData.data[0].data.email}`, { replace: true });
+    if (data[data.length - 1]?.status === 200)
+      navigate(`/user-code/${data[data.length - 1].data.email}`, {
+        replace: true,
+      });
   }, [selector]);
 
   // toastify
@@ -89,7 +87,6 @@ export default function OTPLogin() {
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
-                  console.log(selector);
                   dispatch(
                     postData({
                       api: "http://localhost:4000/auth/OTP-login",
@@ -101,11 +98,11 @@ export default function OTPLogin() {
                 }
               }}
             >
-              {selector.postData.loading ? (
-                  <img className="w-6 h-6" src={spinner} alt="loading..." />
-                ) : (
-                  "Send Code"
-                )}
+              {loading ? (
+                <img className="w-6 h-6" src={spinner} alt="loading..." />
+              ) : (
+                "Send Code"
+              )}
             </button>
           </div>
         </form>

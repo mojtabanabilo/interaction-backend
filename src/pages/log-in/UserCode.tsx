@@ -4,7 +4,6 @@ import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import { userCodeValidation } from "../../utils/functions/functions";
 import { IUserCodeFetchData } from "../../utils/types/interface";
-import { post } from "../../utils/fetch API/fetch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
@@ -21,6 +20,7 @@ export default function UserCode() {
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
+  const { data, loading } = selector.postData;
 
   // navigator
   const navigate = useNavigate();
@@ -39,12 +39,12 @@ export default function UserCode() {
   // lifecycle
   useEffect(() => {
     if (
-      selector.postData.data[1]?.status === 200 &&
-      selector.postData.data[1]?.data.AccessToken
+      data[data.length - 1]?.status === 200 &&
+      data[data.length - 1]?.data.AccessToken
     ) {
       cookies.set(
         "access-token-login",
-        selector.postData.data[1]?.data.AccessToken,
+        data[data.length - 1]?.data.AccessToken,
         {
           expires: new Date(Date.now() + 259200000),
         }
@@ -115,11 +115,11 @@ export default function UserCode() {
                 }
               }}
             >
-              {selector.postData.loading ? (
-                  <img className="w-6 h-6" src={spinner} alt="loading..." />
-                ) : (
-                  "Login"
-                )}
+              {loading ? (
+                <img className="w-6 h-6" src={spinner} alt="loading..." />
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>

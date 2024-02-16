@@ -40,8 +40,15 @@ export interface ILoginErrorValidation {
     passwordError?: string
 }
 
-// INITIAL STATE >> features/features.ts
+// INITIAL STATE >> features/fetchPost.ts
 export interface IinitialStateFetchPost {
+    loading?: boolean
+    data?: any
+    errorMsg?: string
+}
+
+// INITIAL STATE >> features/fetchGet.ts
+export interface IinitialStateFetchGet {
     loading?: boolean
     data?: any
     errorMsg?: string

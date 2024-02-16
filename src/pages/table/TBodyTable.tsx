@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import styles from "./style/tbodytable.module.scss";
 import { setStateResize } from "../../utils/functions/functions";
+import { getData } from "../../features/fetch-get/fetchGet";
+import { useAppDispatch, useAppSelector } from "../../utils/functions/functions";
 
 const data = [
   {
@@ -30,10 +32,18 @@ const data = [
 ];
 
 export default function TBodyTable() {
+  // redux-hooks
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector(state => state);
+
   // states
   const [userWidth, setUserWidth] = useState<number>(0);
 
   // lifecycle
+  useEffect(() => {
+    dispatch(getData());
+    console.log(selector.getData.data);
+  }, []);
   useEffect(() => {
     setStateResize(setUserWidth);
   }, [userWidth]);

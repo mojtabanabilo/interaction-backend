@@ -1,15 +1,28 @@
 import { Outlet, Navigate, useLocation, Route } from "react-router-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, Suspense, lazy } from "react";
 import {
   ISignupErrorValidation,
   ISignupData,
   ILoginErrorValidation,
   ILoginData,
 } from "../types/interface";
-import { useDispatch, useSelector } from 'react-redux'
-import type { TypedUseSelectorHook } from 'react-redux'
-import type { RootState, AppDispatch } from '../../app/store';
+import { useDispatch, useSelector } from "react-redux";
+import type { TypedUseSelectorHook } from "react-redux";
+import type { RootState, AppDispatch } from "../../app/store";
+import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
+
+// pages
+const Panel: any = lazy(() => import("../../pages/panel/Panel"));
+const EditUser: any = lazy(() => import("../../pages/edit-user/EditUser"));
+
+// components
+import SuspenseLoading from "../../components/suspense-loading/SuspenseLoading";
+
+// REDUX HOOKS ----------------------------
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+// REDUX HOOKS ----------------------------
 
 export const signUpValidation: Function = (
   data: ISignupData
@@ -103,7 +116,7 @@ export const userCodeValidation: Function = (data: {
 
   if (!data.code) {
     objError.codeError = "Code is Empty !";
-  } else if(!codeRegex.test(data.code)) {
+  } else if (!codeRegex.test(data.code)) {
     objError.codeError = "Please type Number !";
   } else {
     delete objError.codeError;
@@ -113,27 +126,32 @@ export const userCodeValidation: Function = (data: {
 };
 
 // PRIVATE ROUTE -------------------------------
-const cookie = new Cookies();
-export const PrivateRoutes : any = () => {
-  const cookieStatus = cookie.get('access-token-login');
-  return (
-    cookieStatus ? <Outlet/> : <Navigate to={'/sign-up'}/>
-  )
-}
+export const PrivateRoutes: any = () => {
+  const cookies = new Cookies();
+  const currentCookie = cookies.get('access-token-login')
+  const decodedToken = jwtDecode<any>(currentCookie);
+  const { role } = decodedToken;
+  return role === "Admin" ? (
+    <Suspense fallback={<SuspenseLoading />}>
+      <Panel />
+    </Suspense>
+  ) : (
+    <Suspense fallback={<SuspenseLoading />}>
+      <EditUser />
+    </Suspense>
+  );
+};
 // PRIVATE ROUTE -------------------------------
 
 // SET STATE RESIZE - SIDEBAR COMPONENT ------------------------------
-export const setStateResize : Function = (setData : Dispatch<SetStateAction<number>>) : any => {
-  const handleResizeWindow : any = () => setData(window.innerWidth);
+export const setStateResize: Function = (
+  setData: Dispatch<SetStateAction<number>>
+): any => {
+  const handleResizeWindow: any = () => setData(window.innerWidth);
   handleResizeWindow();
   window.addEventListener("resize", handleResizeWindow);
   return () => {
-     window.removeEventListener("resize", handleResizeWindow);
+    window.removeEventListener("resize", handleResizeWindow);
   };
-}
+};
 // SET STATE RESIZE FOR SIDEBAR COMPONENT ------------------------------
-
-// REDUX HOOKS ----------------------------
-export const useAppDispatch: () => AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-// REDUX HOOKS ----------------------------

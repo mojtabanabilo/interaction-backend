@@ -16,13 +16,12 @@ import {
 } from "../../utils/functions/functions";
 import { postData } from "../../features/fetch-post/fetchPost";
 import Cookies from "universal-cookie";
-import { JwtPayload, jwtDecode } from "jwt-decode";
-
+import { jwtDecode } from "jwt-decode";
 
 export default function LogIn() {
   // cookies
   const cookies = new Cookies();
-  
+
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
@@ -30,7 +29,7 @@ export default function LogIn() {
 
   // navigator
   const navigate = useNavigate();
-  
+
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
     email: "",
@@ -50,18 +49,16 @@ export default function LogIn() {
     if (
       data[data.length - 1]?.status === 200 &&
       data[data.length - 1]?.data.accessToken
-      ) {
-      const decodedToken = jwtDecode<any>(data[data.length - 1]?.data.accessToken);
+    ) {
+      const decodedToken = jwtDecode<any>(
+        data[data.length - 1]?.data.accessToken
+      );
       console.log(decodedToken);
-      console.log(new Date(decodedToken.iat));
-      console.log(new Date(decodedToken.exp));
-      console.log(new Date(decodedToken?.exp).getMilliseconds());
-      
       
       cookies.set(
         "access-token-login",
         data[data.length - 1].data.accessToken,
-        { expires: new Date(Date.now() + 2592000) }
+        { expires: new Date(decodedToken.exp * 1000) }
       );
       navigate("/", { replace: true });
     }
@@ -153,10 +150,10 @@ export default function LogIn() {
               }}
             >
               {loading ? (
-                  <img className="w-6 h-6" src={spinner} alt="loading..." />
-                ) : (
-                  "Login"
-                )}
+                <img className="w-6 h-6" src={spinner} alt="loading..." />
+              ) : (
+                "Login"
+              )}
             </button>
           </div>
         </form>

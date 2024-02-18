@@ -1,9 +1,13 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // icon
 import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
 
 export default function EditUser() {
+  // navigator
+  const navigate = useNavigate();
+
   return (
     <section className="w-9/12 bg-white p-5 rounded-2xl border-gray-200 border-4 border-opacity-60">
       <div className="flex p-2 overflow-hidden">
@@ -88,6 +92,7 @@ export default function EditUser() {
           <button
             type="submit"
             className="flex w-24 justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 hover:text-white transition-colors border-indigo-500 border-2 focus-visible:outline focus-visible:outline-2  focus-visible:outline-indigo-600"
+            onClick={() => navigate("/sign-up", { replace: true })}
           >
             Cancel
           </button>

@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { PrivateRoutes } from "./utils/functions/functions";
 import "./App.css";
 
+// components
+import SuspenseLoading from "./components/suspense-loading/SuspenseLoading";
+
 // pages
 const SignUp: any = lazy(() => import("./pages/sign-up/SignUp"));
 const LogIn: any = lazy(() => import("./pages/log-in/LogIn"));
@@ -15,11 +18,11 @@ const EditUser: any = lazy(() => import("./pages/edit-user/EditUser"));
 export default function App() {
   return (
     <main className="w-screen min-h-screen flex justify-center items-center overflow-auto">
-      <Suspense fallback>
+      <Suspense fallback={<SuspenseLoading />}>
         <Router>
           <Routes>
-            <Route element={<PrivateRoutes />}>
-              <Route path="/" element={<Panel />} />
+            <Route path="/" element={<PrivateRoutes />}>
+              <Route path="/panel" element={<Panel />} />
               <Route path="/edit-user" element={<EditUser />} />
             </Route>
             <Route path="/sign-up" element={<SignUp />} />

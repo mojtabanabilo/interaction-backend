@@ -55,7 +55,7 @@ export default function TBodyTable() {
     <>
       {data[data.length - 1]?.data.length > 0 &&
         userWidth > 650 &&
-        data[data.length - 1]?.data.map((item: any, index: number) => (
+        data[data.length - 1].data.map((item: any, index: number) => (
           <tr className={styles.tr_product_body} key={item.id}>
             <td>{index + 1}</td>
             <td>{item.firstName}</td>

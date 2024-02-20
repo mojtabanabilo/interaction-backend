@@ -22,6 +22,18 @@
         }
         .icon_container_edit{background: #00aa09;}
         .icon_container_remove{background: #aa0000;}
+        .custom_select{
+            border-radius: 5px;
+            margin-right: 3px;
+            cursor: pointer;
+            padding: 3px;
+            border: 2px #646464 solid;
+            background: #f5f5f5;
+            font-weight: 600;
+            &:focus{
+                outline: none;
+            }
+        }
     }
 }
 
@@ -40,6 +52,10 @@
         &:nth-of-type(2n){
             background: #646464;
             color: #fff;
+            .custom_select{
+                color: #000;
+                border: 2px #202020 solid;
+            }
         }
     }
 }

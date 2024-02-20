@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 // icon
 import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
 
 export default function EditUser() {
+  // cookie
+  const cookies = new Cookies();
+
   // navigator
   const navigate = useNavigate();
 
@@ -23,7 +26,7 @@ export default function EditUser() {
             Personal Information
           </h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            Use a permanent address where you can receive mail.
+            You can change your information
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -92,7 +95,10 @@ export default function EditUser() {
           <button
             type="submit"
             className="flex w-24 justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-black shadow-sm hover:bg-indigo-500 hover:text-white transition-colors border-indigo-500 border-2 focus-visible:outline focus-visible:outline-2  focus-visible:outline-indigo-600"
-            onClick={() => navigate("/sign-up", { replace: true })}
+            onClick={() => {
+              cookies.remove('access-token-login')
+              navigate("/sign-up", { replace: true })
+            }}
           >
             Cancel
           </button>

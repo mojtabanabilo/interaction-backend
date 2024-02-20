@@ -7,33 +7,6 @@ import {
   useAppSelector,
 } from "../../utils/functions/functions";
 
-const data = [
-  {
-    firstName: "user1",
-    lastName: "user1",
-    email: "mojjtaba0@gmail.com",
-    accessLevel: "admin",
-  },
-  {
-    firstName: "user2",
-    lastName: "user1",
-    email: "mojjtaba00@gmail.com",
-    accessLevel: "admin",
-  },
-  {
-    firstName: "user3",
-    lastName: "user1",
-    email: "mojjtaba000@gmail.com",
-    accessLevel: "admin",
-  },
-  {
-    firstName: "user4",
-    lastName: "user1",
-    email: "mojjtaba0000@gmail.com",
-    accessLevel: "admin",
-  },
-];
-
 export default function TBodyTable() {
   // redux-hooks
   const dispatch = useAppDispatch();
@@ -63,22 +36,12 @@ export default function TBodyTable() {
             <td>{item.email}</td>
             <td>{item.role}</td>
             <td className={styles.td_icon}>
-              <div className={styles.icon_container_edit}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </div>
+              <select defaultValue={item.role} className={styles.custom_select}>
+                <option value={item.role}>{item.role}</option>
+                <option value={item.role === "User" ? "Admin" : "User"}>
+                  {item.role === "User" ? "Admin" : "User"}
+                </option>
+              </select>
               <div className={styles.icon_container_remove}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -106,24 +69,14 @@ export default function TBodyTable() {
             <td data-cell="First Name">{item.firstName}</td>
             <td data-cell="Last Name">{item.lastName}</td>
             <td data-cell="Email">{item.email}</td>
-            <td data-cell="Access-Level">{item.role}</td>
+            <td data-cell="Role">{item.role}</td>
             <td className={styles.td_icon}>
-              <div className={styles.icon_container_edit}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5 text-white"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
-              </div>
+              <select defaultValue={item.role} className={styles.custom_select}>
+                <option>{item.role}</option>
+                <option value={item.role === "User" ? "Admin" : "User"}>
+                  {item.role === "User" ? "Admin" : "User"}
+                </option>
+              </select>
               <div className={styles.icon_container_remove}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

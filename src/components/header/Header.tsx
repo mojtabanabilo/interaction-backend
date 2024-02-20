@@ -61,7 +61,7 @@ export default function Header() {
             <Link
               to={"/sign-up"}
               onClick={() => {
-                cookies.remove('access-token-login')
+                cookies.remove("access-token-login");
               }}
             >
               <li className="hover:text-blue-500 transition">Logout</li>
@@ -69,10 +69,6 @@ export default function Header() {
           </ul>
           <DropDownMenu />
           <div className="hidden sm:flex justify-center items-center space-x-1 overflow-hidden cursor-pointer">
-            {/* <div className="flex flex-col justify-center items-end space-x-1 overflow-hidden cursor-pointer">
-              <p className="text-gray-800 text-lg">mojtaba nabilo</p>
-              <p className="text-gray-500 text-base font-semibold">admin</p>
-            </div> */}
             <img
               className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
               src={userProfile}

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
-import { userCodeValidation } from "../../utils/functions/functions";
+import { userCodeValidation, notify } from "../../utils/functions/functions";
 import { IUserCodeFetchData } from "../../utils/types/interface";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "universal-cookie";
 import {
@@ -59,9 +59,6 @@ export default function UserCode() {
     setUserCode({ ...userCode, email: email });
   }, [email]);
 
-  // toastify
-  const notify = () => toast.error("Invalid Data !");
-
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -111,7 +108,7 @@ export default function UserCode() {
                     })
                   );
                 } else {
-                  notify();
+                  notify("Invalid Data !", "error");
                 }
               }}
             >

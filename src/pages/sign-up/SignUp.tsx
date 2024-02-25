@@ -7,30 +7,23 @@ import {
   ISignupErrorValidation,
   ISignupTouch,
 } from "../../utils/types/interface";
-import { signUpValidation } from "../../utils/functions/functions";
-import { post } from "../../utils/fetch API/fetch";
-import { ToastContainer, toast } from "react-toastify";
+import { signUpValidation, notify } from "../../utils/functions/functions";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
 import { postData } from "../../features/fetch-post/fetchPost";
-import Cookies from "universal-cookie";
 
 export default function SignUp() {
-  // cookie
-  const cookies = new Cookies();
-
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
+  const { data } = selector.postData;
 
   // navigator
   const navigate = useNavigate();
-
-  // toastify
-  const notify = () => toast.error("Invalid Data !");
 
   // states
   const [signUpData, setSignUpData] = useState<ISignupData>({
@@ -46,7 +39,6 @@ export default function SignUp() {
     emailTouch: false,
     passwordTouch: false,
   });
-  const [data, setData] = useState<any>({});
 
   // lifecycle
   useEffect(() => {
@@ -54,11 +46,11 @@ export default function SignUp() {
   }, [signUpData]);
   useEffect(() => {
     if (
-      selector.postData.data[0] !== undefined &&
-      selector.postData.data[0].data.statusCode === 201
-    )
-      navigate("/log-in");
-    // console.log(selector);
+      data[data.length - 1] !== undefined &&
+      data[data.length - 1]?.status === 201
+    ) {
+      navigate("/log-in", { replace: true });
+    }
   }, [selector]);
 
   return (
@@ -188,7 +180,10 @@ export default function SignUp() {
                       })
                     );
                   } else {
-                    notify();
+                    notify("Invalid Data !", "error");
+                  }
+                  if (selector.postData.errorMsg !== "") {
+                    notify(selector.postData.errorMsg, "error");
                   }
                 }}
               >

@@ -1,5 +1,5 @@
-import { Outlet, Navigate, useLocation, Route } from "react-router-dom";
-import { Dispatch, SetStateAction, Suspense, lazy } from "react";
+import { Outlet, useNavigate, Navigate, Route, Routes } from "react-router-dom";
+import { Dispatch, SetStateAction, Suspense, lazy, useEffect } from "react";
 import {
   ISignupErrorValidation,
   ISignupData,
@@ -7,6 +7,7 @@ import {
   ILoginData,
 } from "../types/interface";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import type { TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../../app/store";
 import { jwtDecode } from "jwt-decode";
@@ -18,6 +19,7 @@ const EditUser: any = lazy(() => import("../../pages/edit-user/EditUser"));
 
 // components
 import SuspenseLoading from "../../components/suspense-loading/SuspenseLoading";
+import SignUp from "../../pages/sign-up/SignUp";
 
 // REDUX HOOKS ----------------------------
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -126,20 +128,27 @@ export const userCodeValidation: Function = (data: {
 };
 
 // PRIVATE ROUTE -------------------------------
-export const PrivateRoutes: any = () => {
+export const AuthenticationMiddleware: any = () => {
   const cookies = new Cookies();
-  const currentCookie = cookies.get('access-token-login')
-  const decodedToken = jwtDecode<any>(currentCookie);
-  const { role } = decodedToken;
-  return role === "Admin" ? (
-    <Suspense fallback={<SuspenseLoading />}>
-      <Panel />
-    </Suspense>
-  ) : (
-    <Suspense fallback={<SuspenseLoading />}>
-      <EditUser />
-    </Suspense>
-  );
+  const currentCookie = cookies.get("access-token-login");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentCookie === undefined) {
+      navigate('/sign-up');
+    } else {
+      try {
+        const decodedToken = jwtDecode<any>(currentCookie);
+        if (decodedToken.role === 'Admin') {
+          navigate('/panel');
+        } else {
+          navigate('/edit-user');
+        }
+      } catch (error) {
+        navigate('/sign-up');
+      }
+    }
+  }, [currentCookie, navigate]);
 };
 // PRIVATE ROUTE -------------------------------
 
@@ -155,3 +164,10 @@ export const setStateResize: Function = (
   };
 };
 // SET STATE RESIZE FOR SIDEBAR COMPONENT ------------------------------
+
+// toastify
+export const notify = (text: string, typeToast: string) => {
+  if (typeToast === "success") toast.success(text);
+  else if (typeToast === "error") toast.error(text);
+};
+// toastify

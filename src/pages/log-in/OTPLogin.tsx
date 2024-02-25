@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
-import { otpLoginValidation } from "../../utils/functions/functions";
-import { ToastContainer, toast } from "react-toastify";
+import { otpLoginValidation, notify } from "../../utils/functions/functions";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   useAppDispatch,
@@ -37,9 +37,6 @@ export default function OTPLogin() {
         replace: true,
       });
   }, [selector]);
-
-  // toastify
-  const notify: Function = () => toast.error("Invalid Data !");
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -94,7 +91,7 @@ export default function OTPLogin() {
                     })
                   );
                 } else {
-                  notify();
+                  notify("Invalid Data !", "error");
                 }
               }}
             >

@@ -1,6 +1,6 @@
 import { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { PrivateRoutes } from "./utils/functions/functions";
+import { AuthenticationMiddleware } from "./utils/functions/functions";
 import "./App.css";
 
 // components
@@ -21,10 +21,14 @@ export default function App() {
       <Suspense fallback={<SuspenseLoading />}>
         <Router>
           <Routes>
-            <Route path="/" element={<PrivateRoutes />}>
-              <Route path="/panel" element={<Panel />} />
-              <Route path="/edit-user" element={<EditUser />} />
-            </Route>
+            <Route
+              path="/"
+              element={
+                <AuthenticationMiddleware />
+              }
+            />
+            <Route path="panel" element={<Panel />} />
+            <Route path="edit-user" element={<EditUser />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/log-in" element={<LogIn />} />
             <Route path="/otp-login" element={<OTPLogin />} />

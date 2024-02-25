@@ -7,8 +7,8 @@ import {
   ILoginTouch,
   ILoginErrorValidation,
 } from "../../utils/types/interface";
-import { logInValidation } from "../../utils/functions/functions";
-import { ToastContainer, toast } from "react-toastify";
+import { logInValidation, notify } from "../../utils/functions/functions";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   useAppDispatch,
@@ -53,19 +53,15 @@ export default function LogIn() {
       const decodedToken = jwtDecode<any>(
         data[data.length - 1]?.data.accessToken
       );
-      console.log(decodedToken);
       
       cookies.set(
         "access-token-login",
         data[data.length - 1].data.accessToken,
         { expires: new Date(decodedToken.exp * 1000) }
       );
-      navigate("/", { replace: true });
+      navigate("/");
     }
   }, [selector]);
-
-  // toastify
-  const notify = () => toast.error("Invalid Data !");
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -145,7 +141,7 @@ export default function LogIn() {
                     })
                   );
                 } else {
-                  notify();
+                  notify("Invalid Data !", "error");
                 }
               }}
             >

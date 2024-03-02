@@ -41,14 +41,14 @@ export interface ILoginErrorValidation {
 }
 
 // INITIAL STATE >> features/fetchPost.ts
-export interface IinitialStateFetchPost {
+export interface IinitialStateFetch {
     loading?: boolean
     data?: any
     errorMsg?: string
 }
 
 // INITIAL STATE >> features/fetchGet.ts
-export interface IinitialStateFetchGet {
+export interface IinitialStateFetch {
     loading?: boolean
     data?: any
     errorMsg?: string

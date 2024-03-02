@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./style/tbodytable.module.scss";
 import { setStateResize } from "../../utils/functions/functions";
 import { getData } from "../../features/fetch-get/fetchGet";
+import { deleteData } from "../../features/fetch-delete/fetchDelete";
 import {
   useAppDispatch,
   useAppSelector,
@@ -42,7 +43,10 @@ export default function TBodyTable() {
                   {item.role === "User" ? "Admin" : "User"}
                 </option>
               </select>
-              <div className={styles.icon_container_remove}>
+              <div
+                className={styles.icon_container_remove}
+                onClick={() => dispatch(deleteData(item.id))}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -77,7 +81,10 @@ export default function TBodyTable() {
                   {item.role === "User" ? "Admin" : "User"}
                 </option>
               </select>
-              <div className={styles.icon_container_remove}>
+              <div
+                className={styles.icon_container_remove}
+                onClick={() => dispatch(deleteData(item.id))}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

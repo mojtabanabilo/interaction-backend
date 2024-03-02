@@ -1,15 +1,28 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { useAppDispatch, useAppSelector } from "../../utils/functions/functions";
+import { getData } from "../../features/fetch-get/fetchGet";
 
 // icon
 import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
 
 export default function EditUser() {
+  // redux-hooks
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state.getData);
+  
   // cookie
   const cookies = new Cookies();
-
+  
   // navigator
   const navigate = useNavigate();
+  const params = useParams();
+
+  // lifecycle
+  // useEffect(() => {
+  //   dispatch(getData("http://localhost:4000/user/whoami"));
+  // }, []);
 
   return (
     <section className="w-9/12 bg-white p-5 rounded-2xl border-gray-200 border-4 border-opacity-60">

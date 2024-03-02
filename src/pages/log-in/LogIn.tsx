@@ -17,7 +17,7 @@ import {
 import { postData } from "../../features/fetch-post/fetchPost";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
-
+// http://localhost:4000/user/{id}
 export default function LogIn() {
   // cookies
   const cookies = new Cookies();
@@ -25,7 +25,7 @@ export default function LogIn() {
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
-  const { data, loading } = selector.postData;
+  const { data, loading, errorMsg } = selector.postData;
 
   // navigator
   const navigate = useNavigate();
@@ -43,6 +43,9 @@ export default function LogIn() {
 
   // lifecycle
   useEffect(() => {
+    if (cookies.get("access-token-login") !== undefined) navigate("/");
+  }, []);
+  useEffect(() => {
     setLoginErr(logInValidation(loginData));
   }, [loginData]);
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function LogIn() {
       const decodedToken = jwtDecode<any>(
         data[data.length - 1]?.data.accessToken
       );
-      
+
       cookies.set(
         "access-token-login",
         data[data.length - 1].data.accessToken,

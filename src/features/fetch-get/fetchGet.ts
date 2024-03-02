@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IinitialStateFetchGet } from "../../utils/types/interface";
+import { IinitialStateFetch } from "../../utils/types/interface";
 import axios from "axios";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 
-const initialState: IinitialStateFetchGet = {
+const initialState: IinitialStateFetch = {
   loading: false,
   data: [],
   errorMsg: "",
@@ -39,7 +39,8 @@ const fetchGetData = createSlice({
     });
     builder.addCase(getData.rejected, (state, action) => {
       state.loading = false;
-      (state.data = []), (state.errorMsg = action.error.message);
+      state.data = [];
+      state.errorMsg = action.error.message;
     });
   },
 });

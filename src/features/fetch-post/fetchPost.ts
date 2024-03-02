@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   ISignupData,
-  IinitialStateFetchPost,
+  IinitialStateFetch,
   ILoginData,
   IUserCodeFetchData,
 } from "../../utils/types/interface";
 import axios from "axios";
 
-const initialState: IinitialStateFetchPost = {
+const initialState: IinitialStateFetch = {
   loading: false,
   data: [],
   errorMsg: "",
@@ -15,7 +15,7 @@ const initialState: IinitialStateFetchPost = {
 
 const postData = createAsyncThunk(
   "fetchPostData/fetch-post",
-  (api: {
+  async (api: {
     api: string;
     data: ISignupData | ILoginData | IUserCodeFetchData | { email: string };
   }) => {

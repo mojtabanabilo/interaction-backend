@@ -1,5 +1,5 @@
-import { Outlet, useNavigate, Navigate, Route, Routes } from "react-router-dom";
-import { Dispatch, SetStateAction, Suspense, lazy, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   ISignupErrorValidation,
   ISignupData,
@@ -12,14 +12,6 @@ import type { TypedUseSelectorHook } from "react-redux";
 import type { RootState, AppDispatch } from "../../app/store";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
-
-// pages
-const Panel: any = lazy(() => import("../../pages/panel/Panel"));
-const EditUser: any = lazy(() => import("../../pages/edit-user/EditUser"));
-
-// components
-import SuspenseLoading from "../../components/suspense-loading/SuspenseLoading";
-import SignUp from "../../pages/sign-up/SignUp";
 
 // REDUX HOOKS ----------------------------
 export const useAppDispatch: () => AppDispatch = useDispatch;
@@ -135,17 +127,15 @@ export const AuthenticationMiddleware: any = () => {
 
   useEffect(() => {
     if (currentCookie === undefined) {
-      navigate('/sign-up');
+      navigate("/sign-up");
     } else {
       try {
         const decodedToken = jwtDecode<any>(currentCookie);
-        if (decodedToken.role === 'Admin') {
-          navigate('/panel');
-        } else {
-          navigate('/edit-user');
-        }
+        const { email } = decodedToken;
+        if (decodedToken.role === "Admin") navigate("/panel");
+        else navigate(`/edit-user/${email}`);
       } catch (error) {
-        navigate('/sign-up');
+        navigate("/sign-up");
       }
     }
   }, [currentCookie, navigate]);

@@ -11,7 +11,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-import { postData } from "../../features/fetch-post/fetchPost";
+import { postData } from "../../features/post-slice/postSlice";
 
 export default function UserCode() {
   // cookie

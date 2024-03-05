@@ -14,7 +14,7 @@ const initialState: IinitialStateFetch = {
 };
 
 const postData = createAsyncThunk(
-  "fetchPostData/fetch-post",
+  "post-slice/fetch-post",
   async (api: {
     api: string;
     data: ISignupData | ILoginData | IUserCodeFetchData | { email: string };
@@ -26,8 +26,8 @@ const postData = createAsyncThunk(
   }
 );
 
-const fetchPostData = createSlice({
-  name: "fetchPostData",
+const postSlice = createSlice({
+  name: "post-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -47,5 +47,5 @@ const fetchPostData = createSlice({
   },
 });
 
-export default fetchPostData;
+export default postSlice;
 export { postData };

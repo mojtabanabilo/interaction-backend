@@ -11,7 +11,7 @@ const initialState: IinitialStateFetch = {
 };
 
 const getData = createAsyncThunk(
-  "fetchGetData/fetch-get",
+  "get-slice/get-data",
   async (api: string) => {
     return axios
       .get(api, {
@@ -20,12 +20,12 @@ const getData = createAsyncThunk(
         },
       })
       .then((res) => res)
-      .catch((err) => err);
+      .catch((err) => err)
   }
 );
 
-const fetchGetData = createSlice({
-  name: "fetchGetData",
+const getSlice = createSlice({
+  name: "get-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -45,5 +45,5 @@ const fetchGetData = createSlice({
   },
 });
 
-export default fetchGetData;
+export default getSlice;
 export { getData };

@@ -14,7 +14,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-import { postData } from "../../features/fetch-post/fetchPost";
+import { postData } from "../../features/post-slice/postSlice";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
 // http://localhost:4000/user/{id}

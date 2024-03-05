@@ -1,12 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
-import fetchPostData from "../features/fetch-post/fetchPost";
-import fetchGetData from "../features/fetch-get/fetchGet";
+import { EnhancedStore, configureStore } from "@reduxjs/toolkit";
+import postSlice from "../features/post-slice/postSlice";
+import getSlice from "../features/get-slice/getSlice";
 import logger from "redux-logger";
 
-const store: any = configureStore({
+const store: EnhancedStore<any> = configureStore({
   reducer: {
-    postData: fetchPostData.reducer,
-    getData: fetchGetData.reducer
+    postData: postSlice.reducer,
+    getData: getSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

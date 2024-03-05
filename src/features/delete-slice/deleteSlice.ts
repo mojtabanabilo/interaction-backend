@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IinitialStateFetch } from "../../utils/types/interface";
-import { notify } from "../../utils/functions/functions"; 
+import { notify } from "../../utils/functions/functions";
 import axios from "axios";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
@@ -12,7 +12,7 @@ const initialState: IinitialStateFetch = {
 };
 
 const deleteData = createAsyncThunk(
-  "fetchDeleteData/fetch-delete",
+  "delete-slice/delete-data",
   async (id: any) => {
     return axios
       .delete(`http://localhost:4000/user/${id}`, {
@@ -22,21 +22,21 @@ const deleteData = createAsyncThunk(
       })
       .then((res) => {
         if (res.status === 200) {
-            notify("User Removed !", "success");
-            return res;
+          notify("User Removed !", "success");
+          return res;
         }
       })
       .catch((err) => {
         if (err.response.status >= 400) {
-            notify(`${err.message}`, "error");
-            return err;
+          notify(`${err.message}`, "error");
+          return err;
         }
-      })
+      });
   }
 );
 
-const fetchDeleteData = createSlice({
-  name: "fetchDeleteData",
+const deleteSlice = createSlice({
+  name: "delete-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -56,5 +56,5 @@ const fetchDeleteData = createSlice({
   },
 });
 
-export default fetchDeleteData;
+export default deleteSlice;
 export { deleteData };

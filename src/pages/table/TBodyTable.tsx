@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styles from "./style/tbodytable.module.scss";
 import { setStateResize } from "../../utils/functions/functions";
-import { getData } from "../../features/fetch-get/fetchGet";
-import { deleteData } from "../../features/fetch-delete/fetchDelete";
+import { getData } from "../../features/get-slice/getSlice";
+import { deleteData } from "../../features/delete-slice/deleteSlice";
 import {
   useAppDispatch,
   useAppSelector,

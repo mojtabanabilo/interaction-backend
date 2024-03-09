@@ -9,12 +9,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import type { TypedUseSelectorHook } from "react-redux";
-import type { RootState, AppDispatch } from "../../app/store";
+import type { RootState, AppThunkDispatch } from "../../app/store";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
 
 // REDUX HOOKS ----------------------------
-export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppDispatch = () => useDispatch<AppThunkDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 // REDUX HOOKS ----------------------------
 

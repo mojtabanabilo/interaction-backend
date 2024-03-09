@@ -1,4 +1,4 @@
-import { EnhancedStore, configureStore } from "@reduxjs/toolkit";
+import { EnhancedStore, configureStore, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
 import postSlice from "../features/post-slice/postSlice";
 import getSlice from "../features/get-slice/getSlice";
 import logger from "redux-logger";
@@ -17,3 +17,4 @@ const store: EnhancedStore<any> = configureStore({
 export default store;
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+export type AppThunkDispatch = ThunkDispatch<RootState, any, UnknownAction>;

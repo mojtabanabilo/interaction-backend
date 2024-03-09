@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import {
   useAppDispatch,
-  useAppSelector
+  useAppSelector,
 } from "../../utils/functions/functions";
 import { getData } from "../../features/get-slice/getSlice";
 
@@ -11,6 +11,9 @@ import { getData } from "../../features/get-slice/getSlice";
 import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
 
 export default function EditUser() {
+  // states
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
@@ -21,12 +24,14 @@ export default function EditUser() {
 
   // navigator
   const navigate = useNavigate();
-  const params = useParams();
+
   // lifecycle
   useEffect(() => {
     dispatch(getData("http://localhost:4000/user/whoami"));
-    console.log(data);
   }, []);
+  useEffect(() => {
+    selector && setCurrentUser(data[data.length - 1]);    
+  }, [selector]);
 
   return (
     <section className="w-9/12 bg-white p-5 rounded-2xl border-gray-200 border-4 border-opacity-60">
@@ -61,6 +66,7 @@ export default function EditUser() {
                   id="first-name"
                   autoComplete="given-name"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  defaultValue={currentUser?.data.firstName || ""}
                 />
               </div>
             </div>
@@ -79,6 +85,7 @@ export default function EditUser() {
                   id="last-name"
                   autoComplete="family-name"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  defaultValue={currentUser?.data.lastName || ""}
                 />
               </div>
             </div>
@@ -97,6 +104,7 @@ export default function EditUser() {
                   type="email"
                   autoComplete="email"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  defaultValue={currentUser?.data.email || ""}
                 />
               </div>
             </div>

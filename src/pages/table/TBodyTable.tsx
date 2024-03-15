@@ -8,28 +8,40 @@ import {
   useAppSelector,
 } from "../../utils/functions/functions";
 
-export default function TBodyTable() {
+// components
+import ModalDelete from "../../components/modal-delete/ModalDelete";
+
+export default function TBodyTable(): JSX.Element {
+  // states
+  const [userData, setUserData] = useState<any>(null);
+  const [userWidth, setUserWidth] = useState<number>(0);
+  const [showModal, setShowModal] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
+
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
   const { data } = selector.getData;
-
-  // states
-  const [userWidth, setUserWidth] = useState<number>(0);
 
   // lifecycle
   useEffect(() => {
     dispatch(getData("http://localhost:4000/user"));
   }, []);
   useEffect(() => {
+    selector && setUserData(data);
+  }, [selector]);
+  useEffect(() => {
     setStateResize(setUserWidth);
   }, [userWidth]);
+  useEffect(() => {
+    userId !== null && console.log(userId);
+  }, [userId]);
 
   return (
     <>
-      {data[data.length - 1]?.data.length > 0 &&
-        userWidth > 650 &&
-        data[data.length - 1].data.map((item: any, index: number) => (
+      {userWidth > 650 &&
+        userData &&
+        userData[0]?.data?.map((item: any, index: number) => (
           <tr className={styles.tr_product_body} key={item.id}>
             <td>{index + 1}</td>
             <td>{item.firstName}</td>
@@ -45,7 +57,11 @@ export default function TBodyTable() {
               </select>
               <div
                 className={styles.icon_container_remove}
-                onClick={() => dispatch(deleteData(item.id))}
+                onClick={() => {
+                  // dispatch(deleteData(item.id));
+                  setUserId(item.id);
+                  setShowModal(true);
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +81,9 @@ export default function TBodyTable() {
             </td>
           </tr>
         ))}
-      {data.length > 0 &&
-        userWidth < 650 &&
-        data[data.length - 1]?.data.map((item: any, index: number) => (
+      {userWidth < 650 &&
+        userData &&
+        userData[0]?.data?.map((item: any, index: number) => (
           <tr className={styles.tr_product_body} key={item.id}>
             <td data-cell="Row">{index + 1}</td>
             <td data-cell="First Name">{item.firstName}</td>
@@ -103,6 +119,7 @@ export default function TBodyTable() {
             </td>
           </tr>
         ))}
+      {showModal && <ModalDelete state={{ showModal, setShowModal, userId }} />}
     </>
   );
 }

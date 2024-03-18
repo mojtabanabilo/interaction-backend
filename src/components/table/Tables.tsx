@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // component
 import TBodyTable from "./TBodyTable";
 
-export default function Table() {
+export default function Table(): JSX.Element {
   // states
   const [userWidth, setUserWidth] = useState<number>(0);
 
@@ -27,7 +27,7 @@ export default function Table() {
             <th className={styles.th_thead_product}>Last Name</th>
             <th className={styles.th_thead_product}>Email</th>
             <th className={styles.th_thead_product}>Role</th>
-            <th className={styles.th_thead_product}>Edit</th>
+            <th className={styles.th_thead_product}>Remove</th>
           </tr>
         </thead>
         <tbody>

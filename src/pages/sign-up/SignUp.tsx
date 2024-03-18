@@ -16,7 +16,7 @@ import {
 } from "../../utils/functions/functions";
 import { postData } from "../../features/post-slice/postSlice";
 
-export default function SignUp() {
+export default function SignUp(): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);

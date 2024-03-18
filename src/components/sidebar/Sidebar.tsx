@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 // icon
 import mojtabaNabilu from "../../assets/photo_2024-01-09_05-32-18.jpg";
 import github from "../../assets/github.jpg";
-import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
+import userProfile from "../../assets/userProfile.png";
 
 export default function Sidebar(props: {
   show: { open: boolean; setOpen: Dispatch<SetStateAction<boolean>> };
-}) {
+}): JSX.Element {
   return (
     <div className="fixed right-0 border-l-2 border-gray-300 p-2 w-full h-screen xs:w-3/6 bg-gray-100 flex flex-col justify-start items-start">
       <svg
@@ -30,7 +30,7 @@ export default function Sidebar(props: {
         <h2 className="text-2xl font-bold mb-1">Profile</h2>
         <div className="flex justify-start items-center overflow-hidden cursor-pointer p-1">
           <img
-            className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
+            className="inline-block h-10 w-10 rounded-full ring-2 ring-white p-1"
             src={userProfile}
             alt="user-profile"
           />

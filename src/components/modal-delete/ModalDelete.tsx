@@ -1,11 +1,8 @@
-import { useState, JSX } from "react";
+import { JSX } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Button, Modal } from "flowbite-react";
 import { deleteData } from "../../features/delete-slice/deleteSlice";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../utils/functions/functions";
+import { useAppDispatch } from "../../utils/functions/functions";
 
 export default function ModalDelete(props: {
   state: {
@@ -16,7 +13,6 @@ export default function ModalDelete(props: {
 }): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
 
   return (
     <Modal

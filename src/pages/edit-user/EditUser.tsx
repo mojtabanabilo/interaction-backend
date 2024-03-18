@@ -6,13 +6,24 @@ import {
   useAppSelector,
 } from "../../utils/functions/functions";
 import { getData } from "../../features/get-slice/getSlice";
+import { updateData } from "../../features/update(put)-slice/updateSlice";
+import { INewUserData } from "../../utils/types/interface";
+import { jwtDecode } from "jwt-decode";
+import spinner from "../../assets/Rolling-1s-31px.gif";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // icon
-import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
+import userProfile from "../../assets/userProfile.png";
 
-export default function EditUser() {
+export default function EditUser(): JSX.Element {
   // states
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [newUserData, setNewUserData] = useState<INewUserData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
 
   // redux-hooks
   const dispatch = useAppDispatch();
@@ -21,6 +32,7 @@ export default function EditUser() {
 
   // cookie
   const cookies = new Cookies();
+  const decodedToken = jwtDecode<any>(cookies.get("access-token-login"));
 
   // navigator
   const navigate = useNavigate();
@@ -30,7 +42,7 @@ export default function EditUser() {
     dispatch(getData("http://localhost:4000/user/whoami"));
   }, []);
   useEffect(() => {
-    selector && setCurrentUser(data[data.length - 1]);    
+    selector && setCurrentUser(data[data.length - 1]);
   }, [selector]);
 
   return (
@@ -48,13 +60,13 @@ export default function EditUser() {
             Personal Information
           </h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            You can change your information
+            You must change your data.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-3">
               <label
-                htmlFor="first-name"
+                htmlFor="firstName"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 First name
@@ -62,18 +74,24 @@ export default function EditUser() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="first-name"
+                  name="firstName"
                   id="first-name"
                   autoComplete="given-name"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   defaultValue={currentUser?.data.firstName || ""}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
 
             <div className="sm:col-span-3">
               <label
-                htmlFor="last-name"
+                htmlFor="lastName"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
                 Last name
@@ -81,11 +99,17 @@ export default function EditUser() {
               <div className="mt-2">
                 <input
                   type="text"
-                  name="last-name"
+                  name="lastName"
                   id="last-name"
                   autoComplete="family-name"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   defaultValue={currentUser?.data.lastName || ""}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -105,6 +129,12 @@ export default function EditUser() {
                   autoComplete="email"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   defaultValue={currentUser?.data.email || ""}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      [e.target.name]: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -114,8 +144,21 @@ export default function EditUser() {
           <button
             type="submit"
             className="flex w-24 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 transition-colors border-indigo-600 border-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(
+                updateData({
+                  api: `http://localhost:4000/user/${decodedToken.sub}`,
+                  data: newUserData,
+                })
+              );
+            }}
           >
-            Submit
+            {selector?.updateData.loading ? (
+              <img className="w-6 h-6" src={spinner} alt="loading..." />
+            ) : (
+              "Submit"
+            )}
           </button>
           <button
             type="submit"
@@ -129,6 +172,18 @@ export default function EditUser() {
           </button>
         </div>
       </form>
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }

@@ -13,7 +13,7 @@ import {
 } from "../../utils/functions/functions";
 import { postData } from "../../features/post-slice/postSlice";
 
-export default function UserCode() {
+export default function UserCode(): JSX.Element {
   // cookie
   const cookies = new Cookies();
 

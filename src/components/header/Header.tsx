@@ -9,16 +9,12 @@ import Sidebar from "../sidebar/Sidebar";
 import DropDownMenu from "../drop-down-menu/DropDownMenu";
 
 // icon
-import userProfile from "../../assets/photo_2024-01-09_05-32-18.jpg";
+import userProfile from "../../assets/userProfile.png";
 
-export default function Header() {
+export default function Header(): JSX.Element {
   // cookie
   const cookies = new Cookies();
-
-  // navigator
-  const navigate = useNavigate();
-  const location = useLocation();
-
+  
   // states
   const [open, setOpen] = useState<boolean>(false);
   const [screenSize, setScreenSize] = useState<number>(0);

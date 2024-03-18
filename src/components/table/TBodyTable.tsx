@@ -3,6 +3,7 @@ import styles from "./style/tbodytable.module.scss";
 import { setStateResize } from "../../utils/functions/functions";
 import { getData } from "../../features/get-slice/getSlice";
 import { deleteData } from "../../features/delete-slice/deleteSlice";
+import { updateData } from "../../features/update(put)-slice/updateSlice";
 import {
   useAppDispatch,
   useAppSelector,
@@ -33,9 +34,6 @@ export default function TBodyTable(): JSX.Element {
   useEffect(() => {
     setStateResize(setUserWidth);
   }, [userWidth]);
-  useEffect(() => {
-    userId !== null && console.log(userId);
-  }, [userId]);
 
   return (
     <>
@@ -47,18 +45,29 @@ export default function TBodyTable(): JSX.Element {
             <td>{item.firstName}</td>
             <td>{item.lastName}</td>
             <td>{item.email}</td>
-            <td>{item.role}</td>
-            <td className={styles.td_icon}>
-              <select defaultValue={item.role} className={styles.custom_select}>
+            <td className={styles.td_select}>
+              <select
+                defaultValue={item.role}
+                onChange={(e) =>
+                  dispatch(
+                    updateData({
+                      api: `http://localhost:4000/user/updaterole/${item.id}`,
+                      data: { role: e.target.value },
+                    })
+                  )
+                }
+                className={styles.custom_select}
+              >
                 <option value={item.role}>{item.role}</option>
                 <option value={item.role === "User" ? "Admin" : "User"}>
                   {item.role === "User" ? "Admin" : "User"}
                 </option>
               </select>
+            </td>
+            <td className={styles.td_icon}>
               <div
                 className={styles.icon_container_remove}
                 onClick={() => {
-                  // dispatch(deleteData(item.id));
                   setUserId(item.id);
                   setShowModal(true);
                 }}
@@ -89,17 +98,32 @@ export default function TBodyTable(): JSX.Element {
             <td data-cell="First Name">{item.firstName}</td>
             <td data-cell="Last Name">{item.lastName}</td>
             <td data-cell="Email">{item.email}</td>
-            <td data-cell="Role">{item.role}</td>
-            <td className={styles.td_icon}>
-              <select defaultValue={item.role} className={styles.custom_select}>
+            <td data-cell="Role" className={styles.td_select}>
+              <select
+                defaultValue={item.role}
+                onChange={(e) =>
+                  dispatch(
+                    updateData({
+                      api: `http://localhost:4000/user/updaterole/${item.id}`,
+                      data: { role: e.target.value },
+                    })
+                  )
+                }
+                className={styles.custom_select}
+              >
                 <option>{item.role}</option>
                 <option value={item.role === "User" ? "Admin" : "User"}>
                   {item.role === "User" ? "Admin" : "User"}
                 </option>
               </select>
+            </td>
+            <td className={styles.td_icon}>
               <div
                 className={styles.icon_container_remove}
-                onClick={() => dispatch(deleteData(item.id))}
+                onClick={() => {
+                  setUserId(item.id);
+                  setShowModal(true);
+                }}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

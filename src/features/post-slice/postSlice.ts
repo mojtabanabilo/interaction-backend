@@ -22,7 +22,7 @@ const postData = createAsyncThunk(
     return axios
       .post(api.api, api.data)
       .then((res) => res)
-      .catch((err) => err);
+      .catch((err) => err)
   }
 );
 

@@ -17,8 +17,8 @@ import {
 import { postData } from "../../features/post-slice/postSlice";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
-// http://localhost:4000/user/{id}
-export default function LogIn() {
+
+export default function LogIn(): JSX.Element {
   // cookies
   const cookies = new Cookies();
 

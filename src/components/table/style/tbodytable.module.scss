@@ -10,18 +10,7 @@
     &:nth-of-type(2n){
         background: #c9d8ff;
     }
-    .td_icon{
-        @include flex(row, center, center);
-        .icon_container_remove, .icon_container_edit{
-            width: 24px;
-            height: 24px;
-            border-radius: 5px;
-            margin: 0 2px;
-            cursor: pointer;
-            @include flex(row, center, center);
-        }
-        .icon_container_edit{background: #00aa09;}
-        .icon_container_remove{background: #aa0000;}
+    .td_select{
         .custom_select{
             border-radius: 5px;
             margin-right: 3px;
@@ -33,6 +22,17 @@
             &:focus{
                 outline: none;
             }
+        }
+    }
+    .td_icon{
+        @include flex(row, center, center);
+        .icon_container_remove{
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #aa0000;
+            @include flex(row, center, center);
         }
     }
 }

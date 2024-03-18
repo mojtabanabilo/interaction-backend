@@ -9,7 +9,7 @@ function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DropDownMenu() {
+export default function DropDownMenu(): JSX.Element {
   return (
     <Menu as="div" className="hidden text-left sm:block">
       <div>
@@ -33,7 +33,7 @@ export default function DropDownMenu() {
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-              <Menu.Item>
+            <Menu.Item>
               {({ active }) => (
                 <Link
                   to={"https://github.com/AbolfazlGhaderi"}

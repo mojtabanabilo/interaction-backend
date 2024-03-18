@@ -28,6 +28,13 @@ export interface IUserCodeFetchData {
     email: string | undefined
 }
 
+// EditUser component
+export interface INewUserData {
+    firstName: string
+    lastName: string
+    email: string
+}
+
 // Utils > functions > functions.ts
 export interface ISignupErrorValidation {
     firstNameError?: string

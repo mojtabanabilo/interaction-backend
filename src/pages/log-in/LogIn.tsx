@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import {
@@ -14,21 +14,13 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-import { postData } from "../../features/post-slice/postSlice";
-import Cookies from "universal-cookie";
-import { jwtDecode } from "jwt-decode";
+import { loginFetch } from "../../features/login-slice/loginSlice";
 
 export default function LogIn(): JSX.Element {
-  // cookies
-  const cookies = new Cookies();
-
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
-  const { data, loading, errorMsg } = selector.postData;
-
-  // navigator
-  const navigate = useNavigate();
+  const { data, loading } = selector.loginFetch;
 
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
@@ -43,28 +35,8 @@ export default function LogIn(): JSX.Element {
 
   // lifecycle
   useEffect(() => {
-    if (cookies.get("access-token-login") !== undefined) navigate("/");
-  }, []);
-  useEffect(() => {
     setLoginErr(logInValidation(loginData));
   }, [loginData]);
-  useEffect(() => {
-    if (
-      data[data.length - 1]?.status === 200 &&
-      data[data.length - 1]?.data.accessToken
-    ) {
-      const decodedToken = jwtDecode<any>(
-        data[data.length - 1]?.data.accessToken
-      );
-
-      cookies.set(
-        "access-token-login",
-        data[data.length - 1].data.accessToken,
-        { expires: new Date(decodedToken.exp * 1000) }
-      );
-      navigate("/");
-    }
-  }, [selector]);
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -132,13 +104,12 @@ export default function LogIn(): JSX.Element {
 
           <div>
             <button
-              // type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={(e) => {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
                   dispatch(
-                    postData({
+                    loginFetch({
                       api: "http://localhost:4000/auth/login",
                       data: loginData,
                     })

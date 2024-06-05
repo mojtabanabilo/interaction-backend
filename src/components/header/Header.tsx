@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import imageTailWind from "../../assets/icons8-tailwind-css-96.png";
 import { setStateResize } from "../../utils/functions/functions";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../utils/functions/functions";
 import Cookies from "universal-cookie";
 
 // components
@@ -12,9 +16,14 @@ import DropDownMenu from "../drop-down-menu/DropDownMenu";
 import userProfile from "../../assets/userProfile.png";
 
 export default function Header(): JSX.Element {
+  // redux-hooks
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state);
+
   // cookie
-  const cookies = new Cookies();
-  
+  const cookie = new Cookies();
+  const navigate = useNavigate();
+
   // states
   const [open, setOpen] = useState<boolean>(false);
   const [screenSize, setScreenSize] = useState<number>(0);
@@ -53,16 +62,15 @@ export default function Header(): JSX.Element {
               d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
             />
           </svg>
-          <ul className="hidden sm:block flex justify-between items-center [&>*]:mx-2 text-base font-semibold text-gray-400 [&>*]:cursor-pointer">
-            <Link
-              to={"/sign-up"}
-              onClick={() => {
-                cookies.remove("access-token-login");
-              }}
-            >
-              <li className="hover:text-blue-500 transition">Logout</li>
-            </Link>
-          </ul>
+          <Link
+            to={"/sign-up"}
+            onClick={() => {
+              cookie.remove("access-token-login");
+            }}
+            className="hover:text-blue-500 transition"
+          >
+            Logout
+          </Link>
           <DropDownMenu />
           <div className="hidden sm:flex justify-center items-center space-x-1 overflow-hidden cursor-pointer">
             <img

@@ -56,5 +56,5 @@ const deleteSlice = createSlice({
   },
 });
 
-export default deleteSlice;
+export default deleteSlice.reducer;
 export { deleteData };

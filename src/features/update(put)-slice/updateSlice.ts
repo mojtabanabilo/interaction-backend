@@ -60,5 +60,5 @@ const updateSlice = createSlice({
   },
 });
 
-export default updateSlice;
+export default updateSlice.reducer;
 export { updateData };

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   ISignupErrorValidation,
@@ -124,6 +124,7 @@ export const AuthenticationMiddleware: any = () => {
   const cookies = new Cookies();
   const currentCookie = cookies.get("access-token-login");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (currentCookie === undefined) {
@@ -156,7 +157,7 @@ export const setStateResize: Function = (
 // SET STATE RESIZE FOR SIDEBAR COMPONENT ------------------------------
 
 // toastify
-export const notify = (text: string, typeToast: string) => {
+export const notify: Function = (text: string, typeToast: string) => {
   if (typeToast === "success") toast.success(text);
   else if (typeToast === "error") toast.error(text);
 };

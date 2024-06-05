@@ -14,16 +14,21 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-import { postData } from "../../features/post-slice/postSlice";
+import { signupFetch } from "../../features/signup-slice/signupSlice";
+import Cookies from "universal-cookie";
+import axios from "axios";
 
 export default function SignUp(): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state);
-  const { data } = selector.postData;
+  const { data, loading } = selector.signupFetch;
 
   // navigator
   const navigate = useNavigate();
+
+  // cookie
+  const cookie = new Cookies();
 
   // states
   const [signUpData, setSignUpData] = useState<ISignupData>({
@@ -39,19 +44,26 @@ export default function SignUp(): JSX.Element {
     emailTouch: false,
     passwordTouch: false,
   });
+  const [status, setStatus] = useState<any>(null);
 
   // lifecycle
   useEffect(() => {
+    cookie.remove("access-token-login");
+  }, []);
+  useEffect(() => {
     setSignUpError(signUpValidation(signUpData));
   }, [signUpData]);
+  // useEffect(() => {
+  //   if (data !== undefined && data[data.length - 1]?.statusCode === 201) {
+  //     navigate("/log-in", { replace: true });
+  //   }
+  // }, [selector]);
+
   useEffect(() => {
-    if (
-      data[data.length - 1] !== undefined &&
-      data[data.length - 1]?.status === 201
-    ) {
+    if (status !== null && status.data.statusCode === 201) {
       navigate("/log-in", { replace: true });
     }
-  }, [selector]);
+  }, [status]);
 
   return (
     <div className="w-full h-full flex justify-center items-canter">
@@ -170,24 +182,32 @@ export default function SignUp(): JSX.Element {
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md mt-6 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
                   if (Object.keys(signUpError).length === 0) {
-                    dispatch(
-                      postData({
-                        api: "http://localhost:4000/auth/register",
-                        data: signUpData,
+                    // dispatch(
+                    //   signupFetch({
+                    //     api: "http://localhost:4000/auth/register",
+                    //     data: signUpData,
+                    //   })
+                    // );
+                    await axios
+                      .post("http://localhost:4000/auth/register", signUpData)
+                      .then((res) => {
+                        console.log(res);
+
+                        setStatus(res);
                       })
-                    );
+                      .catch((err) => err);
                   } else {
                     notify("Invalid Data !", "error");
                   }
-                  if (selector.postData.errorMsg !== "") {
-                    notify(selector.postData.errorMsg, "error");
+                  if (selector.signupFetch.errorMsg !== "") {
+                    notify(selector.signupFetch.errorMsg, "error");
                   }
                 }}
               >
-                {selector.postData.loading ? (
+                {loading ? (
                   <img className="w-6 h-6" src={spinner} alt="loading..." />
                 ) : (
                   "Create account"

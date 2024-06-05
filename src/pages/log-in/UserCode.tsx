@@ -11,7 +11,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-import { postData } from "../../features/post-slice/postSlice";
+import { userCodeFetch } from "../../features/userCode-slice/userCodeSlice";
 
 export default function UserCode(): JSX.Element {
   // cookie
@@ -19,8 +19,7 @@ export default function UserCode(): JSX.Element {
 
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-  const { data, loading } = selector.postData;
+  const selector = useAppSelector((state) => state.userCodeFetch);
 
   // navigator
   const navigate = useNavigate();
@@ -39,12 +38,12 @@ export default function UserCode(): JSX.Element {
   // lifecycle
   useEffect(() => {
     if (
-      data[data.length - 1]?.status === 200 &&
-      data[data.length - 1]?.data.AccessToken
+      selector.data[selector.data.length - 1]?.status === 200 &&
+      selector.data[selector.data.length - 1]?.data.AccessToken
     ) {
       cookies.set(
         "access-token-login",
-        data[data.length - 1]?.data.AccessToken,
+        selector.data[selector.data.length - 1]?.data.AccessToken,
         {
           expires: new Date(Date.now() + 259200000),
         }
@@ -102,7 +101,7 @@ export default function UserCode(): JSX.Element {
                 e.preventDefault();
                 if (Object.keys(userCodeErr).length === 0) {
                   dispatch(
-                    postData({
+                    userCodeFetch({
                       api: "http://localhost:4000/auth/OTP-login",
                       data: userCode,
                     })
@@ -112,7 +111,7 @@ export default function UserCode(): JSX.Element {
                 }
               }}
             >
-              {loading ? (
+              {selector.loading ? (
                 <img className="w-6 h-6" src={spinner} alt="loading..." />
               ) : (
                 "Login"

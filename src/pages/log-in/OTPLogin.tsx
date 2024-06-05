@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import { otpLoginValidation, notify } from "../../utils/functions/functions";
@@ -9,13 +10,13 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-import { postData } from "../../features/post-slice/postSlice";
+// import { postData } from "../../features/login-slice/loginSlice";
+import { otpLoginFetch } from "../../features/otp-login/otpLoginSlice";
 
 export default function OTPLogin(): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-  const { data, loading } = selector.postData;
+  const selector = useAppSelector((state) => state.otpLoginFetch);
 
   //navigator
   const navigate = useNavigate();
@@ -32,8 +33,12 @@ export default function OTPLogin(): JSX.Element {
     setLoginErr(otpLoginValidation(loginData));
   }, [loginData]);
   useEffect(() => {
-    if (data[data.length - 1]?.status === 200)
-      navigate(`/user-code/${data[data.length - 1].data.email}`, {
+    console.log(selector.data, selector.data[selector.data.length - 1])
+    if (
+      selector.data !== undefined &&
+      selector.data[selector.data.length - 1]?.status === 200
+    )
+      navigate(`/user-code/${selector.data[selector.data.length - 1]?.data.email}`, {
         replace: true,
       });
   }, [selector]);
@@ -81,21 +86,28 @@ export default function OTPLogin(): JSX.Element {
             <button
               // type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
                 if (Object.keys(loginErr).length === 0) {
                   dispatch(
-                    postData({
+                    otpLoginFetch({
                       api: "http://localhost:4000/auth/OTP-login",
                       data: loginData,
                     })
                   );
+                  // await axios
+                  //   .post("http://localhost:4000/auth/OTP-login", loginData)
+                  //   .then((res) => {
+                  //     console.log(res);
+                  //     setLoading(false);
+                  //     setStatus(res);
+                  //   });
                 } else {
                   notify("Invalid Data !", "error");
                 }
               }}
             >
-              {loading ? (
+              {selector.loading ? (
                 <img className="w-6 h-6" src={spinner} alt="loading..." />
               ) : (
                 "Send Code"

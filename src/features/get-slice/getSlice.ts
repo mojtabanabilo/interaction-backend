@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IinitialStateFetch } from "../../utils/types/interface";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
-const cookies = new Cookies();
+const cookie = new Cookies();
 
 const initialState: IinitialStateFetch = {
   loading: false,
@@ -16,7 +17,7 @@ const getData = createAsyncThunk(
     return axios
       .get(api, {
         headers: {
-          Authorization: "Bearer " + cookies.get("access-token-login"),
+          Authorization: "Bearer " + cookie.get("access-token-login"),
         },
       })
       .then((res) => res)
@@ -45,5 +46,5 @@ const getSlice = createSlice({
   },
 });
 
-export default getSlice;
+export default getSlice.reducer;
 export { getData };

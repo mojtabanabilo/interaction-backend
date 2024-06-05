@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   ISignupErrorValidation,
@@ -124,7 +124,6 @@ export const AuthenticationMiddleware: any = () => {
   const cookies = new Cookies();
   const currentCookie = cookies.get("access-token-login");
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     if (currentCookie === undefined) {

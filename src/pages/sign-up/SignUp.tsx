@@ -16,13 +16,12 @@ import {
 } from "../../utils/functions/functions";
 import { signupFetch } from "../../features/signup-slice/signupSlice";
 import Cookies from "universal-cookie";
-import axios from "axios";
 
 export default function SignUp(): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-  const { data, loading } = selector.signupFetch;
+  const selector = useAppSelector((state) => state.signupFetch);
+  const { data, loading } = selector;
 
   // navigator
   const navigate = useNavigate();
@@ -44,7 +43,6 @@ export default function SignUp(): JSX.Element {
     emailTouch: false,
     passwordTouch: false,
   });
-  const [status, setStatus] = useState<any>(null);
 
   // lifecycle
   useEffect(() => {
@@ -53,24 +51,20 @@ export default function SignUp(): JSX.Element {
   useEffect(() => {
     setSignUpError(signUpValidation(signUpData));
   }, [signUpData]);
-  // useEffect(() => {
-  //   if (data !== undefined && data[data.length - 1]?.statusCode === 201) {
-  //     navigate("/log-in", { replace: true });
-  //   }
-  // }, [selector]);
-
   useEffect(() => {
-    if (status !== null && status.data.statusCode === 201) {
+    if (data !== undefined && data[data.length - 1]?.statusCode === 200) {
       navigate("/log-in", { replace: true });
+    } else if (data[data.length - 1]?.response?.status === 400 || 401 || 402) {
+      notify(data[data.length - 1]?.response?.data?.message, "error");
     }
-  }, [status]);
+  }, [selector]);
 
   return (
     <div className="w-full h-full flex justify-center items-canter">
       <div className="flex min-w-full min-h-full flex-col justify-center px-6 py-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
-            className="mx-auto h-10 w-auto"
+            className="mx-auto h-10 w-10"
             src={tailwindLogo}
             alt="Your Company"
           />
@@ -185,25 +179,14 @@ export default function SignUp(): JSX.Element {
                 onClick={async (e) => {
                   e.preventDefault();
                   if (Object.keys(signUpError).length === 0) {
-                    // dispatch(
-                    //   signupFetch({
-                    //     api: "http://localhost:4000/auth/register",
-                    //     data: signUpData,
-                    //   })
-                    // );
-                    await axios
-                      .post("http://localhost:4000/auth/register", signUpData)
-                      .then((res) => {
-                        console.log(res);
-
-                        setStatus(res);
+                    dispatch(
+                      signupFetch({
+                        api: "http://localhost:4000/auth/register",
+                        data: signUpData,
                       })
-                      .catch((err) => err);
+                    );
                   } else {
-                    notify("Invalid Data !", "error");
-                  }
-                  if (selector.signupFetch.errorMsg !== "") {
-                    notify(selector.signupFetch.errorMsg, "error");
+                    notify("Invalid data !", "error");
                   }
                 }}
               >

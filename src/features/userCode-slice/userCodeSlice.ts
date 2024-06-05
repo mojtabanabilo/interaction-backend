@@ -19,7 +19,7 @@ const userCodeFetch = createAsyncThunk(
 );
 
 const userCodeSlice = createSlice({
-  name: "user-code",
+  name: "userCode-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

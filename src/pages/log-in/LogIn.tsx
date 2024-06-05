@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import {
@@ -15,12 +15,13 @@ import {
   useAppSelector,
 } from "../../utils/functions/functions";
 import { loginFetch } from "../../features/login-slice/loginSlice";
+import { routes } from "../../utils/constans/constans";
 
 export default function LogIn(): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-  const { data, loading } = selector.loginFetch;
+  const selector = useAppSelector((state) => state.loginFetch);
+  const { data, loading } = selector;
 
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
@@ -130,7 +131,7 @@ export default function LogIn(): JSX.Element {
         <p className="mt-10 text-center text-sm text-gray-500">
           I don't remember the password.{" "}
           <Link
-            to={"/otp-login"}
+            to={routes.OtpLogin}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             OTP Login !
@@ -139,7 +140,7 @@ export default function LogIn(): JSX.Element {
         <p className="mt-2 text-center text-sm text-gray-500">
           i want a new account.{" "}
           <Link
-            to={"/sign-up"}
+            to={routes.signUp}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             Sign-Up

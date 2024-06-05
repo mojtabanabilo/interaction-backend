@@ -15,7 +15,7 @@ const initialState: IinitialStateFetch = {
 };
 
 const loginFetch = createAsyncThunk(
-  "post-slice/fetch-post",
+  "login-slice/fetch-post",
   async (api: {
     api: string;
     data: ILoginData;
@@ -35,7 +35,7 @@ const loginFetch = createAsyncThunk(
 );
 
 const loginSlice = createSlice({
-  name: "post-slice",
+  name: "log-in-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

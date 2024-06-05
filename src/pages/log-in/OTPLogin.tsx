@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import { otpLoginValidation, notify } from "../../utils/functions/functions";
@@ -10,8 +9,8 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../utils/functions/functions";
-// import { postData } from "../../features/login-slice/loginSlice";
 import { otpLoginFetch } from "../../features/otp-login/otpLoginSlice";
+import { routes } from "../../utils/constans/constans";
 
 export default function OTPLogin(): JSX.Element {
   // redux-hooks
@@ -33,7 +32,6 @@ export default function OTPLogin(): JSX.Element {
     setLoginErr(otpLoginValidation(loginData));
   }, [loginData]);
   useEffect(() => {
-    console.log(selector.data, selector.data[selector.data.length - 1])
     if (
       selector.data !== undefined &&
       selector.data[selector.data.length - 1]?.status === 200
@@ -84,7 +82,6 @@ export default function OTPLogin(): JSX.Element {
 
           <div>
             <button
-              // type="submit"
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               onClick={async (e) => {
                 e.preventDefault();
@@ -95,13 +92,6 @@ export default function OTPLogin(): JSX.Element {
                       data: loginData,
                     })
                   );
-                  // await axios
-                  //   .post("http://localhost:4000/auth/OTP-login", loginData)
-                  //   .then((res) => {
-                  //     console.log(res);
-                  //     setLoading(false);
-                  //     setStatus(res);
-                  //   });
                 } else {
                   notify("Invalid Data !", "error");
                 }
@@ -118,7 +108,7 @@ export default function OTPLogin(): JSX.Element {
         <p className="mt-10 text-center text-sm text-gray-500">
           i want a new account.{" "}
           <Link
-            to={"/sign-up"}
+            to={routes.signUp}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             Sign-Up

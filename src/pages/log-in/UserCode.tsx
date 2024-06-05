@@ -12,6 +12,7 @@ import {
   useAppSelector,
 } from "../../utils/functions/functions";
 import { userCodeFetch } from "../../features/userCode-slice/userCodeSlice";
+import { routes } from "../../utils/constans/constans";
 
 export default function UserCode(): JSX.Element {
   // cookie
@@ -122,7 +123,7 @@ export default function UserCode(): JSX.Element {
         <p className="mt-10 text-center text-sm text-gray-500">
           i want a new account.{" "}
           <Link
-            to={"/sign-up"}
+            to={routes.signUp}
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
             Sign-Up

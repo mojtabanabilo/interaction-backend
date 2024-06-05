@@ -9,17 +9,20 @@ const initialState: IinitialStateFetch = {
 };
 
 const signupFetch = createAsyncThunk(
-  "signup/fetch-post",
+  "sign-up/fetch-post",
   async (api: { api: string; data: ISignupData }) => {
     return await axios
       .post(api.api, api.data)
       .then((res) => res)
-      .catch((err) => err);
+      .catch((err) => {
+        if (err) setTimeout(() => window.location.reload(), 3000);
+        return err
+      });
   }
 );
 
 const signupSlice = createSlice({
-  name: "signup",
+  name: "signup-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

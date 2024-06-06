@@ -56,6 +56,7 @@ export default function LogIn(): JSX.Element {
           className="mx-auto h-10 w-auto"
           src={tailwindLogo}
           alt="Your Company"
+          loading="lazy"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Log In to your account
@@ -131,7 +132,12 @@ export default function LogIn(): JSX.Element {
               }}
             >
               {loading ? (
-                <img className="w-6 h-6" src={spinner} alt="loading..." />
+                <img
+                  className="w-6 h-6"
+                  src={spinner}
+                  alt="loading..."
+                  loading="lazy"
+                />
               ) : (
                 "Login"
               )}

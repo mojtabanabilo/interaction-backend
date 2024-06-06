@@ -32,6 +32,7 @@ export default function Header(): JSX.Element {
             src={imageTailWind}
             className="w-10 h-10 md:w-14 md:h-14"
             alt="tailwind"
+            loading="lazy"
           />
           <h1 className="text-xl md:text-2xl font-bold text-gray-400 mx-4">
             Panel
@@ -68,6 +69,7 @@ export default function Header(): JSX.Element {
               className="inline-block h-10 w-10 rounded-full ring-2 ring-white"
               src={userProfile}
               alt="user-profile"
+              loading="lazy"
             />
           </div>
         </div>

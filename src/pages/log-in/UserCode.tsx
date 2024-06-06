@@ -33,22 +33,6 @@ export default function UserCode(): JSX.Element {
   const [userEmail, setUserEmail] = useState<string | null>(
     localStorage.getItem("user-email")
   );
-
-  // lifecycle
-  // useEffect(() => {
-  //   if (
-  //     selector.data[selector.data.length - 1]?.status === 200 &&
-  //     selector.data[selector.data.length - 1]?.data.AccessToken
-  //   ) {
-  //     cookies.set(
-  //       "access-token-login",
-  //       selector.data[selector.data.length - 1]?.data.AccessToken,
-  //       {
-  //         expires: new Date(Date.now() + 259200000),
-  //       }
-  //     );
-  //     navigate("/", { replace: true });
-  //   }
   // }, [selector]);
   useEffect(() => {
     setUserCode({ ...userCode, email: userEmail && JSON.parse(userEmail) });
@@ -63,6 +47,7 @@ export default function UserCode(): JSX.Element {
           className="mx-auto h-10 w-auto"
           src={tailwindLogo}
           alt="Your Company"
+          loading="lazy"
         />
         <h4 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Enter the code that has been sent to your email.
@@ -110,7 +95,12 @@ export default function UserCode(): JSX.Element {
               }}
             >
               {selector.loading ? (
-                <img className="w-6 h-6" src={spinner} alt="loading..." />
+                <img
+                  className="w-6 h-6"
+                  src={spinner}
+                  alt="loading..."
+                  loading="lazy"
+                />
               ) : (
                 "Login"
               )}

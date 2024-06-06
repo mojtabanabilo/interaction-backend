@@ -36,9 +36,12 @@ export default function OTPLogin(): JSX.Element {
       selector.data !== undefined &&
       selector.data[selector.data.length - 1]?.status === 200
     )
-      navigate(`/user-code/${selector.data[selector.data.length - 1]?.data.email}`, {
-        replace: true,
-      });
+      navigate(
+        `/user-code/${selector.data[selector.data.length - 1]?.data.email}`,
+        {
+          replace: true,
+        }
+      );
   }, [selector]);
 
   return (
@@ -48,6 +51,7 @@ export default function OTPLogin(): JSX.Element {
           className="mx-auto h-10 w-auto"
           src={tailwindLogo}
           alt="Your Company"
+          loading="lazy"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           One Time Password
@@ -98,7 +102,12 @@ export default function OTPLogin(): JSX.Element {
               }}
             >
               {selector.loading ? (
-                <img className="w-6 h-6" src={spinner} alt="loading..." />
+                <img
+                  className="w-6 h-6"
+                  src={spinner}
+                  alt="loading..."
+                  loading="lazy"
+                />
               ) : (
                 "Send Code"
               )}

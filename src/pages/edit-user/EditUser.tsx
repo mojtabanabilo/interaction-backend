@@ -52,6 +52,7 @@ export default function EditUser(): JSX.Element {
           className="inline-block h-24 w-24 rounded-full ring-2 ring-white"
           src={userProfile}
           alt="user-profile"
+          loading="lazy"
         />
       </div>
       <form>

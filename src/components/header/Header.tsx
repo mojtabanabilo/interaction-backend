@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import imageTailWind from "../../assets/icons8-tailwind-css-96.png";
 import { setStateResize } from "../../utils/functions/functions";
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../utils/functions/functions";
 import Cookies from "universal-cookie";
 
 // components
@@ -16,13 +12,8 @@ import DropDownMenu from "../drop-down-menu/DropDownMenu";
 import userProfile from "../../assets/userProfile.png";
 
 export default function Header(): JSX.Element {
-  // redux-hooks
-  const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-
   // cookie
   const cookie = new Cookies();
-  const navigate = useNavigate();
 
   // states
   const [open, setOpen] = useState<boolean>(false);

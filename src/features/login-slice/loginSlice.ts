@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  IinitialStateFetch,
-  ILoginData
-} from "../../utils/types/interface";
+import { IinitialStateFetch, ILoginData } from "../../utils/types/interface";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
@@ -16,10 +13,7 @@ const initialState: IinitialStateFetch = {
 
 const loginFetch = createAsyncThunk(
   "login-slice/fetch-post",
-  async (api: {
-    api: string;
-    data: ILoginData;
-  }) => {
+  async (api: { api: string; data: ILoginData }) => {
     return await axios
       .post(api.api, api.data)
       .then((res) => {
@@ -30,12 +24,15 @@ const loginFetch = createAsyncThunk(
         });
         return res;
       })
-      .catch((err) => err);
+      .catch((err) => {
+        if (err) setTimeout(() => window.location.reload(), 3000);
+        return err;
+      });
   }
 );
 
 const loginSlice = createSlice({
-  name: "log-in-slice",
+  name: "login-slice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -46,22 +43,21 @@ const loginSlice = createSlice({
       state.loading = false;
       state.data.push(action.payload);
       state.errorMsg = "";
-      console.log(action.payload);
 
       // set user Cookie ------------------------
-      const decodedToken = jwtDecode<any>(action.payload.data.accessToken);
-      if (
-        (action.payload.data &&
-          action.payload.data.accessToken &&
-          action.payload.status == 200) ||
-        201 ||
-        202
-      ) {
-        cookie.set("access-token-login", action.payload.data.accessToken, {
-          expires: new Date(decodedToken.exp * 1000),
-          path: "/",
-        });
-        location.assign("/");
+      try {
+        const decodedToken = jwtDecode<any>(action.payload.data.accessToken);
+        if (action.payload.status == 200 || 201 || 202) {
+          console.log("cookie");
+
+          cookie.set("access-token-login", action.payload.data.accessToken, {
+            expires: new Date(decodedToken.exp * 1000),
+            path: "/",
+          });
+          location.assign("/");
+        }
+      } catch (error) {
+        console.log(error);
       }
     });
     builder.addCase(loginFetch.rejected, (state, action) => {

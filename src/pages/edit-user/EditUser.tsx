@@ -27,8 +27,8 @@ export default function EditUser(): JSX.Element {
 
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-  const { data } = selector.getData;
+  const selector = useAppSelector((state) => state.getData);
+  const { data } = selector;
 
   // cookie
   const cookies = new Cookies();
@@ -154,7 +154,7 @@ export default function EditUser(): JSX.Element {
               );
             }}
           >
-            {selector?.updateData.loading ? (
+            {selector?.loading ? (
               <img className="w-6 h-6" src={spinner} alt="loading..." />
             ) : (
               "Submit"

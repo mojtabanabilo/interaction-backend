@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import {
@@ -21,10 +21,7 @@ export default function SignUp(): JSX.Element {
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.signupFetch);
-  const { data, loading } = selector;
-
-  // navigator
-  const navigate = useNavigate();
+  const { loading } = selector;
 
   // cookie
   const cookie = new Cookies();
@@ -51,13 +48,6 @@ export default function SignUp(): JSX.Element {
   useEffect(() => {
     setSignUpError(signUpValidation(signUpData));
   }, [signUpData]);
-  useEffect(() => {
-    if (data !== undefined && data[data.length - 1]?.statusCode === 200) {
-      navigate("/log-in", { replace: true });
-    } else if (data[data.length - 1]?.response?.status === 400 || 401 || 402) {
-      notify(data[data.length - 1]?.response?.data?.message, "error");
-    }
-  }, [selector]);
 
   return (
     <div className="w-full h-full flex justify-center items-canter">

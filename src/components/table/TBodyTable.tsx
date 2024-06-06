@@ -20,8 +20,8 @@ export default function TBodyTable(): JSX.Element {
 
   // redux-hooks
   const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state);
-  const { data } = selector.getData;
+  const selector = useAppSelector((state) => state.getData);
+  const { data } = selector;
 
   // lifecycle
   useEffect(() => {

@@ -9,7 +9,7 @@ const initialState: IinitialStateFetch = {
 };
 
 const userCodeFetch = createAsyncThunk(
-  "user-code/fetch-post",
+  "userCode/fetch-post",
   async (api: { api: string; data: IUserCodeFetchData }) => {
     return await axios
       .post(api.api, api.data)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import {
@@ -23,6 +23,9 @@ export default function LogIn(): JSX.Element {
   const selector = useAppSelector((state) => state.loginFetch);
   const { data, loading } = selector;
 
+  // navigator
+  const navigate = useNavigate();
+
   //states
   const [loginData, setLoginData] = useState<ILoginData>({
     email: "",
@@ -38,6 +41,14 @@ export default function LogIn(): JSX.Element {
   useEffect(() => {
     setLoginErr(logInValidation(loginData));
   }, [loginData]);
+  useEffect(() => {
+    if (data !== undefined && data[data.length - 1]?.statusCode === 200) {
+      navigate("/", { replace: true });
+    } else if (data[data.length - 1]?.response?.status === 400 || 401 || 404) {
+      notify(data[data.length - 1]?.response?.data?.message, "error");
+    }
+    
+  }, [selector]);
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

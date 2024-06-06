@@ -47,7 +47,6 @@ export default function LogIn(): JSX.Element {
     } else if (data[data.length - 1]?.response?.status === 400 || 401 || 404) {
       notify(data[data.length - 1]?.response?.data?.message, "error");
     }
-    
   }, [selector]);
 
   return (

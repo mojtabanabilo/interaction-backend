@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tailwindLogo from "../../assets/icons8-tailwind-css-96.png";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import { userCodeValidation, notify } from "../../utils/functions/functions";
 import { IUserCodeFetchData } from "../../utils/types/interface";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cookies from "universal-cookie";
 import {
   useAppDispatch,
   useAppSelector,
@@ -15,18 +14,14 @@ import { userCodeFetch } from "../../features/userCode-slice/userCodeSlice";
 import { routes } from "../../utils/constans/constans";
 
 export default function UserCode(): JSX.Element {
-  // cookie
-  const cookies = new Cookies();
-
   // redux-hooks
   const dispatch = useAppDispatch();
   const selector = useAppSelector((state) => state.userCodeFetch);
 
+  // cookie
+
   // navigator
   const navigate = useNavigate();
-
-  // params
-  const { email } = useParams();
 
   //states
   const [userCode, setUserCode] = useState<IUserCodeFetchData>({
@@ -35,29 +30,31 @@ export default function UserCode(): JSX.Element {
   });
   const [userCodeErr, setUserCodeErr] = useState<{ codeError?: string }>({});
   const [touch, setTouch] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string | null>(
+    localStorage.getItem("user-email")
+  );
 
   // lifecycle
+  // useEffect(() => {
+  //   if (
+  //     selector.data[selector.data.length - 1]?.status === 200 &&
+  //     selector.data[selector.data.length - 1]?.data.AccessToken
+  //   ) {
+  //     cookies.set(
+  //       "access-token-login",
+  //       selector.data[selector.data.length - 1]?.data.AccessToken,
+  //       {
+  //         expires: new Date(Date.now() + 259200000),
+  //       }
+  //     );
+  //     navigate("/", { replace: true });
+  //   }
+  // }, [selector]);
   useEffect(() => {
-    if (
-      selector.data[selector.data.length - 1]?.status === 200 &&
-      selector.data[selector.data.length - 1]?.data.AccessToken
-    ) {
-      cookies.set(
-        "access-token-login",
-        selector.data[selector.data.length - 1]?.data.AccessToken,
-        {
-          expires: new Date(Date.now() + 259200000),
-        }
-      );
-      navigate("/", { replace: true });
-    }
-  }, [selector]);
-  useEffect(() => {
+    setUserCode({ ...userCode, email: userEmail && JSON.parse(userEmail) });
     setUserCodeErr(userCodeValidation(userCode));
+    console.log(userCode);
   }, [userCode.code]);
-  useEffect(() => {
-    setUserCode({ ...userCode, email: email });
-  }, [email]);
 
   return (
     <div className="flex min-w-full min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">

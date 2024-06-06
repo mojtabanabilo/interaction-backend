@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IinitialStateFetch, IUserCodeFetchData } from "../../utils/types/interface";
+import {
+  IinitialStateFetch,
+  IUserCodeFetchData,
+} from "../../utils/types/interface";
 import axios from "axios";
+import { notify } from "../../utils/functions/functions";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
 
 const initialState: IinitialStateFetch = {
   loading: false,
@@ -30,6 +36,25 @@ const userCodeSlice = createSlice({
       state.loading = false;
       state.data.push(action.payload);
       state.errorMsg = "";
+
+      // error notification
+      try {
+        if (action.payload && action.payload.response.status === 400) {
+          notify(action.payload.response.data.message, "error");
+        }
+      } catch (error) {
+        console.log(error);
+        if (
+          action.payload.data &&
+          action.payload.data.statusCode === 200 &&
+          action.payload.data.AccessToken
+        ) {
+          cookies.set("access-token-login", action.payload?.data?.AccessToken, {
+            expires: new Date(Date.now() + 259200000),
+          });
+        }
+        window.location.assign("/");
+      }
     });
     builder.addCase(userCodeFetch.rejected, (state, action) => {
       state.loading = false;

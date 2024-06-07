@@ -30,9 +30,19 @@ export interface IUserCodeFetchData {
 
 // EditUser component
 export interface INewUserData {
-  firstName: string;
-  lastName: string;
-  email: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+export interface IEditUserError {
+  firstNameError?: string;
+  lastNameError?: string;
+  emailError?: string;
+}
+export interface IUserEditTouch {
+  firstNameTouch: boolean;
+  lastNameTouch: boolean;
+  emailTouch: boolean;
 }
 
 // Utils > functions > functions.ts

@@ -4,11 +4,17 @@ import Cookies from "universal-cookie";
 import {
   useAppDispatch,
   useAppSelector,
+  editUserValidation,
 } from "../../utils/functions/functions";
 import { getData } from "../../features/get-slice/getSlice";
 import { updateData } from "../../features/update(put)-slice/updateSlice";
-import { INewUserData } from "../../utils/types/interface";
+import {
+  IEditUserError,
+  INewUserData,
+  IUserEditTouch,
+} from "../../utils/types/interface";
 import { jwtDecode } from "jwt-decode";
+import { notify } from "../../utils/functions/functions";
 import spinner from "../../assets/Rolling-1s-31px.gif";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +23,11 @@ import "react-toastify/dist/ReactToastify.css";
 import userProfile from "../../assets/userProfile.png";
 
 export default function EditUser(): JSX.Element {
+  // redux-hooks
+  const dispatch = useAppDispatch();
+  const selector = useAppSelector((state) => state.getData);
+  const { data } = selector;
+
   // states
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [newUserData, setNewUserData] = useState<INewUserData>({
@@ -24,11 +35,12 @@ export default function EditUser(): JSX.Element {
     lastName: "",
     email: "",
   });
-
-  // redux-hooks
-  const dispatch = useAppDispatch();
-  const selector = useAppSelector((state) => state.getData);
-  const { data } = selector;
+  const [editUserErr, setEditUserErr] = useState<IEditUserError>({});
+  const [touch, setTouch] = useState<IUserEditTouch>({
+    firstNameTouch: false,
+    lastNameTouch: false,
+    emailTouch: false,
+  });
 
   // cookie
   const cookies = new Cookies();
@@ -44,6 +56,9 @@ export default function EditUser(): JSX.Element {
   useEffect(() => {
     selector && setCurrentUser(data[data.length - 1]);
   }, [selector]);
+  useEffect(() => {
+    setEditUserErr(editUserValidation(newUserData, currentUser?.data));
+  }, [newUserData]);
 
   return (
     <section className="w-9/12 bg-white p-5 rounded-2xl border-gray-200 border-4 border-opacity-60">
@@ -79,7 +94,9 @@ export default function EditUser(): JSX.Element {
                   id="first-name"
                   autoComplete="given-name"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={currentUser?.data.firstName || ""}
+                  placeholder={currentUser?.data.firstName || ""}
+                  value={newUserData.firstName}
+                  onFocus={() => setTouch({ ...touch, firstNameTouch: true })}
                   onChange={(e) =>
                     setNewUserData({
                       ...newUserData,
@@ -87,6 +104,11 @@ export default function EditUser(): JSX.Element {
                     })
                   }
                 />
+                {touch.firstNameTouch && (
+                  <span className="text-sm bg-red-200 text-red-800">
+                    {editUserErr.firstNameError}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -104,7 +126,9 @@ export default function EditUser(): JSX.Element {
                   id="last-name"
                   autoComplete="family-name"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={currentUser?.data.lastName || ""}
+                  placeholder={currentUser?.data.lastName || ""}
+                  value={newUserData.lastName}
+                  onFocus={() => setTouch({ ...touch, lastNameTouch: true })}
                   onChange={(e) =>
                     setNewUserData({
                       ...newUserData,
@@ -112,6 +136,11 @@ export default function EditUser(): JSX.Element {
                     })
                   }
                 />
+                {touch.lastNameTouch && (
+                  <span className="text-sm bg-red-200 text-red-800">
+                    {editUserErr.lastNameError}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -129,7 +158,9 @@ export default function EditUser(): JSX.Element {
                   type="email"
                   autoComplete="email"
                   className="px-2 outline-none block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  defaultValue={currentUser?.data.email || ""}
+                  placeholder={currentUser?.data.email || ""}
+                  value={newUserData.email}
+                  onFocus={() => setTouch({ ...touch, emailTouch: true })}
                   onChange={(e) =>
                     setNewUserData({
                       ...newUserData,
@@ -137,6 +168,11 @@ export default function EditUser(): JSX.Element {
                     })
                   }
                 />
+                {touch.emailTouch && (
+                  <span className="text-sm bg-red-200 text-red-800">
+                    {editUserErr.emailError}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -147,12 +183,16 @@ export default function EditUser(): JSX.Element {
             className="flex w-24 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 transition-colors border-indigo-600 border-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={(e) => {
               e.preventDefault();
-              dispatch(
-                updateData({
-                  api: `http://localhost:4000/user/${decodedToken.sub}`,
-                  data: newUserData,
-                })
-              );
+              if (Object.keys(editUserErr).length === 0) {
+                dispatch(
+                  updateData({
+                    api: `http://localhost:4000/user/${decodedToken.sub}`,
+                    data: newUserData,
+                  })
+                );
+              } else {
+                notify("Invalid Data !", "error");
+              }
             }}
           >
             {selector?.loading ? (

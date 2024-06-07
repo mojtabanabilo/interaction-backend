@@ -5,6 +5,7 @@ import {
   ISignupData,
   ILoginErrorValidation,
   ILoginData,
+  INewUserData,
 } from "../types/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -115,6 +116,48 @@ export const userCodeValidation: Function = (data: {
   } else {
     delete objError.codeError;
   }
+
+  return objError;
+};
+
+export const editUserValidation: Function = (
+  data: INewUserData,
+  currentUser: any
+) => {
+  const wordsRegex: RegExp = /^[a-z ,.'-]+$/i;
+  const emailRegex: RegExp = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/;
+  const objError: any = {};
+
+  if (!data.firstName) {
+    objError.firstNameError = "Firstname is Empty !";
+  } else if (data.firstName === currentUser.firstName) {
+    objError.firstNameError = "ّّPlease change your Firstname";
+  } else if (!wordsRegex.test(data.firstName)) {
+    objError.firstNameError = "Just use words !";
+  } else {
+    delete objError.firstNameError;
+  }
+
+  if (!data.lastName) {
+    objError.lastNameError = "Lastname is Empty !";
+  } else if (data.lastName === currentUser.lastName) {
+    objError.lastNameError = "Please change your Lastname";
+  } else if (!wordsRegex.test(data.lastName)) {
+    objError.lastNameError = "Just use words !";
+  } else {
+    delete objError.lastNameError;
+  }
+
+  if (!data.email) {
+    objError.emailError = "Email is Empty !";
+  } else if (data.email === currentUser.email) {
+    objError.emailError = "ّّPlease change your Email";
+  } else if (!emailRegex.test(data.email)) {
+    objError.emailError = "The Email Entered is Incorrect !";
+  } else {
+    delete objError.emailError;
+  }
+  console.log(objError);
 
   return objError;
 };
